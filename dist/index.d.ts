@@ -12,12 +12,19 @@ interface DialogTypesAGroup {
 }
 interface DialolgRunConfig<T> {
     transitionName: string;
-    type: T;
+    type: T & string & number;
     data: {
         [key: string]: any;
     };
 }
-declare const RDialog: <T extends DialogTypesAGroup>(dialogTypes: T) => (config: DialolgRunConfig<keyof T>) => import("vue/types/vue").CombinedVueInstance<Record<never, any> & Vue, {
+interface BaseConfig {
+    container?: VueConstructor | 'div';
+    containerClass?: string;
+    data?: {
+        [key: string]: any;
+    };
+}
+declare const RDialog: <T extends DialogTypesAGroup>(dialogTypes: T, baseConfig: BaseConfig) => (config: DialolgRunConfig<keyof T>) => import("vue/types/vue").CombinedVueInstance<Record<never, any> & Vue, {
     visible: boolean;
     closed: boolean;
     id: string;

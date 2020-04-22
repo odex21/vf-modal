@@ -731,9 +731,14 @@ const generateClass = list => list.reduce((res, cur) => {
   return res;
 }, '');
 
+const defaultBaseConfig = {
+  container: 'div',
+  containerClass: 'dialog-wrapper',
+  data: {}
+};
 const Component = Vue.extend({});
 
-const dialog = dialogTypes => config => {
+const dialog = (dialogTypes, baseConfig) => config => {
   const {
     transitionName = 'fade',
     type,
@@ -807,6 +812,11 @@ const dialog = dialogTypes => config => {
         }, [title]));
       }
 
+      const {
+        container,
+        containerClass,
+        data: baseAttrs
+      } = merge(defaultBaseConfig, baseConfig);
       return h("transition", {
         "attrs": {
           "name": transitionName
@@ -822,9 +832,11 @@ const dialog = dialogTypes => config => {
         "class": "fixed-wrapper",
         "on": {
           "touchmove": prevent
+        },
+        "attrs": { ...baseAttrs
         }
-      }, [h("div", {
-        "class": generateClass(['dialog-wrapper', type + ''])
+      }, [h(container, {
+        "class": generateClass([containerClass, type])
       }, [defaultNode, customNode]), h("div", {
         "class": "mask-wrapper"
       })])]);

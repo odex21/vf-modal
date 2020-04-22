@@ -19,15 +19,29 @@ interface DialogTypesAGroup {
 
 interface DialolgRunConfig<T> {
   transitionName: string
-  type: T,
+  type: T & string & number,
   data: {
     [ key: string ]: any
   }
 }
 
+interface BaseConfig {
+  container?: VueConstructor | 'div'
+  containerClass?: string
+  data?: {
+    [ key: string ]: any
+  }
+}
+
+const defaultBaseConfig = {
+  container: 'div',
+  containerClass: 'dialog-wrapper',
+  data: {}
+}
+
 const Component = Vue.extend({})
 
-const dialog = <T extends DialogTypesAGroup> (dialogTypes: T) => (config: DialolgRunConfig<keyof T>) => {
+const dialog = <T extends DialogTypesAGroup> (dialogTypes: T, baseConfig: BaseConfig) => (config: DialolgRunConfig<keyof T>) => {
   const {
     transitionName = 'fade',
     type,
@@ -91,17 +105,20 @@ const dialog = <T extends DialogTypesAGroup> (dialogTypes: T) => (config: Dialol
         defaultNode.push(<div class="dialog-title">{title}</div>)
       }
 
+      const { container, containerClass, data: baseAttrs } = merge(defaultBaseConfig, baseConfig)
+
       return (
         <transition name={transitionName} onAfterLeave={this.handleAfterLeave}>
           <div
             v-show={this.visible}
             class="fixed-wrapper"
             onTouchmove={prevent}
+            {...{ attrs: baseAttrs }}
           >
-            <div class={generateClass([ 'dialog-wrapper', type + '' ])}>
+            <container class={generateClass([ containerClass, type ])}>
               {defaultNode}
               {customNode}
-            </div>
+            </container>
 
             <div class="mask-wrapper"></div>
           </div>
