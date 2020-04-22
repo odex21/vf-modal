@@ -1,0 +1,11 @@
+{
+  "presets": [
+    [
+      "@vue/babel-preset-jsx",
+      {
+        "vModel": false
+      }
+    ],
+    "@babel/preset-typescript"
+  ]
+}

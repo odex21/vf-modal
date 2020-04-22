@@ -1,0 +1,61 @@
+@import './fn'
+
+.fixed-wrapper {
+  z-index: 10
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  display: flex
+  justify-content: center
+  align-items: center
+  user-select: none
+}
+
+.dialog-wrapper {
+  position: relative
+  z-index: 11
+
+  .close-btn {
+    position: absolute
+    top: vw(-60)
+    right: 0
+    width: vw(48)
+    height: vw(48)
+    border-radius: vw(24)
+    background-color: rgba(255, 255, 255, 0.2)
+
+    &:before {
+      content: ''
+      position: absolute
+      top: 48%
+      left: 10%
+      width: 80%
+      height: vw(3)
+      background-color: rgba(255, 255, 255, 0.8)
+      transform: rotate(45deg)
+    }
+
+    &:after {
+      content: ''
+      position: absolute
+      top: 48%
+      left: 10%
+      width: 80%
+      height: vw(3)
+      background-color: rgba(255, 255, 255, 0.8)
+      transform: rotate(-45deg)
+    }
+  }
+}
+
+.mask-wrapper {
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  background: rgba(0, 0, 0, 0.6)
+  z-index: 10
+}
