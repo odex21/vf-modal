@@ -8,15 +8,27 @@
 </head>
 
 <body>
+  <link rel="stylesheet" href="../dist/index.css">
+  <script type="module" src="index.js">
+  </script>
+  <style>
+    .component {
+      width: 200px;
+      height: 300px;
+      background: #fff;
+    }
+
+    .abc {
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      background-color: aqua;
+    }
+  </style>
 
   <h1>hello world</h1>
-  <script type="module">
-    console.log('hello')
-    import { hello, b } from '../dist/index.js'
-    hello()
-    b()
+  <button onclick="openModal()">open modal</button>
 
-  </script>
 </body>
 
 </html>

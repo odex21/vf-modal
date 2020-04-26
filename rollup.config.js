@@ -8,50 +8,65 @@ import stylus from 'rollup-plugin-stylus-compiler'
 import css from 'rollup-plugin-css-porter'
 import { terser } from "rollup-plugin-terser"
 const extensions = [DEFAULT_EXTENSIONS]
+import commonjs from 'rollup-plugin-commonjs'
+
+const TARGET = process.env.TARGET
+if (!TARGET) {
+  throw new Error('TARGET package must be specified via --environment flag.')
+}
+
+console.log(TARGET)
+
+const MODE = process.env.MODE || 'dev'
+
+const plugins = [
+  clear({
+    targets: ['dist'],
+    watch: true,
+  }),
+  replace({
+    'process.env.NODE_ENV': JSON.stringify('production')
+  }),
+  resolve({
+    jsnext: true,
+    browser: true,
+    main: true,
+    preferBuiltins: false,
+    extensions,
+  }),
+  typescript({
+    tsconfig: 'tsconfig.json',
+  }),
+  babel({
+    exclude: 'node_modules/**', // only transpile our source code
+    extensions: [
+      ...DEFAULT_EXTENSIONS,
+      '.ts',
+      '.tsx'
+    ]
+  }),
+  commonjs(),
+  stylus(),
+  css()
+]
+if (MODE === 'production') {
+  plugins.push(terser())
+}
+
+
 export default {
   input: 'src/index.tsx',
   output: [
     {
       file: `dist/index.js`,
       format: 'esm',
+      paths: TARGET === 'browerEsm' ? {
+        vue: 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js'
+      } : {}
     },
-    {
-      file: 'demo/vue-cli/RDialog/index.js',
-      format: 'esm'
-    }
   ],
   external: [
     'vue'
   ],
-  plugins: [
-    clear({
-      targets: ['dist'],
-      watch: true,
-    }),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    }),
-    resolve({
-      jsnext: true,
-      browser: true,
-      main: true,
-      preferBuiltins: false,
-      extensions,
-    }),
-    typescript({
-      tsconfig: 'tsconfig.json',
-    }),
-    babel({
-      exclude: 'node_modules/**', // only transpile our source code
-      extensions: [
-        ...DEFAULT_EXTENSIONS,
-        '.ts',
-        '.tsx'
-      ]
-    }),
-    // terser(),
-    stylus(),
-    css()
-  ],
-
+  plugins
 }
