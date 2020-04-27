@@ -52,7 +52,7 @@ const Dialog = createVfModal(
   closeButtonClass: 'abc', //关闭按钮的className，会替换掉默认的.close-btn
   awaitClose: false, // 是否等待modal 关闭之后resolve
   container: 'div', // modal 容器 可以是div 或者 Vue 组件
-  containerClass: 'class', // 会和原来的.dialog-wrapper合并
+  containerClass: 'class', // 会和原来的.dialog-wrapper**合并**
   containerStyle: { // 容器的 style
     zIndex: 100
   },
@@ -109,3 +109,9 @@ window.openModal = () => {
          ``` 
 
 ### 
+
+### 当前拥有的自带组件
+
+   - close
+     - 一个简单的关闭按钮，点击会调用实例的```close('close')```方法
+     - 可以更改```closeButtonClass```或者覆盖样式，来变更外观或位置
