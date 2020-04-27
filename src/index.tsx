@@ -24,6 +24,7 @@ export interface ModalComponent<T> {
   slot?: string
   on?: ListenerGroup<T>
   className?: string
+  ref?: string
 }
 
 export type ModalItemGroup<T> = (ModalComponent<T> | string)[]
@@ -32,30 +33,29 @@ export interface ModalTypesGroup<T> {
 }
 
 
-export interface ModalRunConfig<T, K> {
-  type: T & string,
-  data?: {
-    [ key: string ]: any
-  },
-  onClose?: (instance: K, type: CloseType) => any
-  on?: RunListenerGroup<K>
+interface BaseConfig {
   awaitClose?: boolean
   containerStyle?: CSS.Properties
-  maskClosable?: boolean
   containerClass?: string
+  maskClosable?: boolean
 }
 
-export interface BaseConfig {
-  container?: VueConstructor | 'div'
-  containerClass?: string
-  data?: {
+export interface ModalRunConfig<T, K> extends BaseConfig {
+  type: T & string,
+  onClose?: (instance: K, type: CloseType) => any
+  on?: RunListenerGroup<K>
+  props?: {
     [ key: string ]: any
-  },
-  awaitClose?: boolean
-  containerStyle?: CSS.Properties
+  }
+}
+
+export interface CreateConfig extends BaseConfig {
+  container?: VueConstructor | 'div'
   transitionName?: string
   closeButtonClass?: string
-  maskClosable?: boolean
+  conatainerProps?: {
+    [ key: string ]: any
+  }
 }
 
 export type CloseType = 'close' | 'custom' | 'instance'
@@ -66,10 +66,9 @@ export interface baseResolve {
   type: CloseType
 }
 
-const defaultBaseConfig: BaseConfig = {
+const defaultBaseConfig: CreateConfig = {
   container: 'div',
   containerClass: 'dialog-wrapper',
-  data: {},
   transitionName: 'fade',
   containerStyle: {
     zIndex: 999
@@ -118,15 +117,15 @@ const Component = Vue.extend({
   },
 })
 
+const zIndex = 0
 
-
-const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup: T, baseConfig?: BaseConfig) =>
+const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup: T, createConfig?: CreateConfig) =>
   (config: ModalRunConfig<keyof T, ModalIntance>): Promise<baseResolve> => {
     return new Promise((resolve, reject) => {
 
       const {
         type,
-        data = { text: 'hi father', a: 's' },
+        props = { text: 'hi father', a: 's' },
         awaitClose,
         containerStyle: runContainerStyle = {},
         maskClosable: runMaskClosalbe,
@@ -153,12 +152,10 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
           const temp = filter(e => !!(typeof e !== 'string' && e.component), customList) as ModalComponent<ModalIntance>[]
 
           const customNode = temp.map(el => {
-            const { component, on: elOn, slot, className } = el
+            const { component, on: elOn, slot, className, ref } = el
             const { on: runOn } = config
             const on = runOn ? merge(elOn || {}, runOn) : elOn
-            let listeners: ListenerGroup<ModalIntance>
 
-            // if(component !== 'div' && component)
             const defaultL = {
               close: (type: CloseType = 'close', ...args: any[]) => this.close(type, ...args),
             }
@@ -177,26 +174,34 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
               }
               return res
               // todo fix type
-            }, Object.create({}) as any) : {}
+            }, {} as any) : {}
             const ll = merge(defaultL, l)
 
-            const attrs = merge(el.defaultProps || {}, data)
+            const attrs = merge(el.defaultProps || {}, props)
 
             return (
               <component
                 {...{ attrs, }}
+                ref={ref}
                 on={ll}
                 class={className}
               >{slot}</component>
             )
           })
 
-          const { container, containerClass, data: baseAttrs, transitionName, containerStyle, closeButtonClass, maskClosable } = merge(defaultBaseConfig, baseConfig || {})
-
+          const {
+            container,
+            containerClass,
+            conatainerProps: baseAttrs,
+            transitionName,
+            containerStyle,
+            closeButtonClass,
+            maskClosable,
+          } = merge(defaultBaseConfig, createConfig || {})
 
           const defaultNode = []
           if (checkType('close')) {
-            defaultNode.push(<div class={closeButtonClass} onClick={() => this.close('close')}></div>)
+            defaultNode.push(<div style={{ zIndex: zIndex + 2 }} class={closeButtonClass} onClick={() => this.close('close')}></div>)
           }
 
 
@@ -220,12 +225,12 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
                 {...{ attrs: baseAttrs }}
                 style={containerStyle}
               >
-                <container class={generateClass(containerClassList)}>
+                <container ref='body' style={{ zIndex: zIndex + 1 }} class={generateClass(containerClassList)}>
                   {defaultNode}
                   {customNode}
                 </container>
 
-                <div onClick={maskClickHandler} class="mask-wrapper"></div>
+                <div style={{ zIndex }} onClick={maskClickHandler} class="mask-wrapper"></div>
               </div>
             </transition >
           )

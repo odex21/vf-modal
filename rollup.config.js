@@ -60,9 +60,13 @@ export default {
     {
       file: `dist/index.js`,
       format: 'esm',
-      paths: TARGET === 'browerEsm' ? {
+    },
+    {
+      file: `dist/brower/index.js`,
+      format: 'esm',
+      paths: {
         vue: 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js'
-      } : {}
+      }
     },
   ],
   external: [

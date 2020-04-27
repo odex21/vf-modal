@@ -1,4 +1,4 @@
-import { createVfModal } from '../dist/index.js'
+import { createVfModal } from '../dist/brower/index.js'
 
 const Dialog = createVfModal({
   net: [
@@ -10,6 +10,7 @@ const Dialog = createVfModal({
       defaultProps: {
         any: 'any'
       },
+      ref: 'item',
       on: {
         click: () => { },
         custom: (instance, type, ...args) => {
@@ -27,17 +28,20 @@ const Dialog = createVfModal({
     zIndex: 100
   },
   maskClosable: true,
-  transitionName: 'fade'
+  transitionName: 'fade',
+  conatainerProps: {
+    id: '123',
+  }
 })
-window.openModal = () => {
-  Dialog({
+window.openModal = async () => {
+  const { instance } = await Dialog({
     type: 'net',
     awaitClose: false,
     containerClass: 'any',
     containerStyle: {
       zIndex: 200
     },
-    data: {
+    props: {
       any: 'any'
     },
     maskClosable: true,
@@ -51,7 +55,9 @@ window.openModal = () => {
       }
     },
     onClose: (instance, type, ...args) => {
-    }
+    },
   })
+
+  console.log(instance.$refs)
 }
 
