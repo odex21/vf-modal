@@ -15,7 +15,6 @@ if (!TARGET) {
   throw new Error('TARGET package must be specified via --environment flag.')
 }
 
-console.log(TARGET)
 
 const MODE = process.env.MODE || 'dev'
 
