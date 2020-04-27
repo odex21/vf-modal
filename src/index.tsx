@@ -58,7 +58,7 @@ export interface CreateConfig extends BaseConfig {
   }
 }
 
-export type CloseType = 'close' | 'custom' | 'instance'
+export type CloseType = 'close' | 'custom' | 'instance' | string & {}
 
 export type ModalIntance = InstanceType<typeof Component>
 export interface baseResolve {
@@ -157,6 +157,7 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
             const on = runOn ? merge(elOn || {}, runOn) : elOn
 
             const defaultL = {
+              // 监听组件中调用的```close```事件，关闭modal
               close: (type: CloseType = 'close', ...args: any[]) => this.close(type, ...args),
             }
 
