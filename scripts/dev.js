@@ -1,6 +1,6 @@
 const execa = require('execa')
 
-const target = 'browerEsm'
+const target = 'esm'
 
 execa(
   'rollup',
