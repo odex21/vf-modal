@@ -1,7 +1,7 @@
 import './styles/index.styl'
 
 import Vue from 'vue'
-import { prevent, generateClass, findKey } from './utils'
+import { prevent, generateClass, findKey, hyphenate } from './utils'
 import { filter, merge } from 'ramda'
 import { VueConstructor } from 'vue/types/vue'
 import * as CSS from 'csstype'
@@ -138,7 +138,8 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
       } : config.onClose
 
 
-      const customList = modalTypesGroup[ type ] || []
+      const customList = modalTypesGroup[ type ]
+      if (!customList) throw Error(`not have dialog of this type, ${type}`)
 
       const checkType = findKey(customList)
 
@@ -212,7 +213,7 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
             }
           }
 
-          const containerClassList: string[] = [ type ]
+          const containerClassList: string[] = [ hyphenate(type) ]
           if (containerClass) containerClassList.push(containerClass)
           if (runContainerClass) containerClassList.push(runContainerClass)
 
