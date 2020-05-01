@@ -1,6 +1,6 @@
 {
   "name": "vf-modal",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.6",
     "@babel/preset-typescript": "^7.9.0",
     "@rollup/plugin-commonjs": "^11.1.0",
     "@rollup/plugin-node-resolve": "^7.1.3",

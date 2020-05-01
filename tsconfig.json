@@ -21,7 +21,8 @@
       "esnext",
       "dom",
       "dom.iterable",
-      "scripthost"
+      "scripthost",
+      "es2015"
     ],
     "types": [
       "vue"

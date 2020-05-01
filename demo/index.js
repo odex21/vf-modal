@@ -18,6 +18,13 @@ const Dialog = createVfModal({
         }
       }
     }
+  ],
+  abCde: [
+    'close',
+    {
+      component: 'div',
+      slot: 'ab-cde'
+    }
   ]
 }, {
   closeButtonClass: 'abc',
