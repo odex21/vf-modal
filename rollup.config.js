@@ -15,6 +15,31 @@ if (!TARGET) {
   throw new Error('TARGET package must be specified via --environment flag.')
 }
 
+const browerEsm = TARGET === 'esm'
+
+const output = browerEsm ?
+  [
+    {
+      file: `dist/brower/index.js`,
+      format: 'esm',
+      paths: {
+        vue: 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js'
+      }
+    },
+  ] : [
+    {
+      file: `dist/index.js`,
+      format: 'esm',
+    },
+  ]
+
+const external = [
+  'vue',
+]
+
+if (TARGET === 'es') {
+  external.push('ramda')
+}
 
 const MODE = process.env.MODE || 'dev'
 
@@ -55,21 +80,7 @@ if (MODE === 'production') {
 
 export default {
   input: 'src/index.tsx',
-  output: [
-    {
-      file: `dist/index.js`,
-      format: 'esm',
-    },
-    {
-      file: `dist/brower/index.js`,
-      format: 'esm',
-      paths: {
-        vue: 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js'
-      }
-    },
-  ],
-  external: [
-    'vue'
-  ],
-  plugins
+  output,
+  plugins,
+  external
 }

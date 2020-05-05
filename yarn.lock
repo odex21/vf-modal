@@ -1666,6 +1666,11 @@ ramda@^0.25.0:
   resolved "https://registry.npm.taobao.org/ramda/download/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
   integrity sha1-j99oIxz/qQvC+UYDkKDLdKKbKak=
 
+ramda@^0.27.0:
+  version "0.27.0"
+  resolved "https://registry.npm.taobao.org/ramda/download/ramda-0.27.0.tgz#915dc29865c0800bf3f69b8fd6c279898b59de43"
+  integrity sha1-kV3CmGXAgAvz9puP1sJ5iYtZ3kM=
+
 regenerate-unicode-properties@^8.2.0:
   version "8.2.0"
   resolved "https://registry.npm.taobao.org/regenerate-unicode-properties/download/regenerate-unicode-properties-8.2.0.tgz#e5de7111d655e7ba60c057dbe9ff37c87e65cdec"

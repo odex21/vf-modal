@@ -1,16 +1,230 @@
-import t from"vue";function n(t,n,r){return n in t?Object.defineProperty(t,n,{value:r,enumerable:!0,configurable:!0,writable:!0}):t[n]=r,t}function r(t,n){var r=Object.keys(t);if(Object.getOwnPropertySymbols){var e=Object.getOwnPropertySymbols(t);n&&(e=e.filter((function(n){return Object.getOwnPropertyDescriptor(t,n).enumerable}))),r.push.apply(r,e)}return r}function e(t){for(var e=1;e<arguments.length;e++){var o=null!=arguments[e]?arguments[e]:{};e%2?r(Object(o),!0).forEach((function(r){n(t,r,o[r])})):Object.getOwnPropertyDescriptors?Object.defineProperties(t,Object.getOwnPropertyDescriptors(o)):r(Object(o)).forEach((function(n){Object.defineProperty(t,n,Object.getOwnPropertyDescriptor(o,n))}))}return t}function o(){return(o=Object.assign||function(t){for(var n,r=1;r<arguments.length;r++)for(var e in n=arguments[r])Object.prototype.hasOwnProperty.call(n,e)&&(t[e]=n[e]);return t}).apply(this,arguments)}var u=["attrs","props","domProps"],i=["class","style","directives"],c=["on","nativeOn"],a=function(t,n){return function(){t&&t.apply(this,arguments),n&&n.apply(this,arguments)}},s=function(t){return t.reduce((function(t,n){for(var r in n)if(t[r])if(-1!==u.indexOf(r))t[r]=o({},t[r],n[r]);else if(-1!==i.indexOf(r)){var e=t[r]instanceof Array?t[r]:[t[r]],s=n[r]instanceof Array?n[r]:[n[r]];t[r]=e.concat(s)}else if(-1!==c.indexOf(r))for(var f in n[r])if(t[r][f]){var l=t[r][f]instanceof Array?t[r][f]:[t[r][f]],p=n[r][f]instanceof Array?n[r][f]:[n[r][f]];t[r][f]=l.concat(p)}else t[r][f]=n[r][f];else if("hook"==r)for(var h in n[r])t[r][h]=t[r][h]?a(t[r][h],n[r][h]):n[r][h];else t[r]=n[r];else t[r]=n[r];return t}),{})};
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+import Vue from 'vue';
+import { curry, find, memoizeWith, identity, merge, filter } from 'ramda';
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+function _extends(){return _extends=Object.assign||function(a){for(var b,c=1;c<arguments.length;c++)for(var d in b=arguments[c],b)Object.prototype.hasOwnProperty.call(b,d)&&(a[d]=b[d]);return a},_extends.apply(this,arguments)}var normalMerge=["attrs","props","domProps"],toArrayMerge=["class","style","directives"],functionalMerge=["on","nativeOn"],mergeJsxProps=function(a){return a.reduce(function(c,a){for(var b in a)if(!c[b])c[b]=a[b];else if(-1!==normalMerge.indexOf(b))c[b]=_extends({},c[b],a[b]);else if(-1!==toArrayMerge.indexOf(b)){var d=c[b]instanceof Array?c[b]:[c[b]],e=a[b]instanceof Array?a[b]:[a[b]];c[b]=d.concat(e);}else if(-1!==functionalMerge.indexOf(b)){for(var f in a[b])if(c[b][f]){var g=c[b][f]instanceof Array?c[b][f]:[c[b][f]],h=a[b][f]instanceof Array?a[b][f]:[a[b][f]];c[b][f]=g.concat(h);}else c[b][f]=a[b][f];}else if("hook"==b)for(var i in a[b])c[b][i]=c[b][i]?mergeFn(c[b][i],a[b][i]):a[b][i];else c[b]=a[b];return c},{})},mergeFn=function(a,b){return function(){a&&a.apply(this,arguments),b&&b.apply(this,arguments);}};var helper=mergeJsxProps;
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-function f(){for(var t=0,n=0,r=arguments.length;n<r;n++)t+=arguments[n].length;var e=Array(t),o=0;for(n=0;n<r;n++)for(var u=arguments[n],i=0,c=u.length;i<c;i++,o++)e[o]=u[i];return e}function l(t){return null!=t&&"object"==typeof t&&!0===t["@@functional/placeholder"]}function p(t){return function n(r){return 0===arguments.length||l(r)?n:t.apply(this,arguments)}}function h(t){return function n(r,e){switch(arguments.length){case 0:return n;case 1:return l(r)?n:p((function(n){return t(r,n)}));default:return l(r)&&l(e)?n:l(r)?p((function(n){return t(n,e)})):l(e)?p((function(n){return t(r,n)})):t(r,e)}}}function y(t,n){switch(t){case 0:return function(){return n.apply(this,arguments)};case 1:return function(t){return n.apply(this,arguments)};case 2:return function(t,r){return n.apply(this,arguments)};case 3:return function(t,r,e){return n.apply(this,arguments)};case 4:return function(t,r,e,o){return n.apply(this,arguments)};case 5:return function(t,r,e,o,u){return n.apply(this,arguments)};case 6:return function(t,r,e,o,u,i){return n.apply(this,arguments)};case 7:return function(t,r,e,o,u,i,c){return n.apply(this,arguments)};case 8:return function(t,r,e,o,u,i,c,a){return n.apply(this,arguments)};case 9:return function(t,r,e,o,u,i,c,a,s){return n.apply(this,arguments)};case 10:return function(t,r,e,o,u,i,c,a,s,f){return n.apply(this,arguments)};default:throw new Error("First argument to _arity must be a non-negative integer no greater than ten")}}var d=h((function(t,n){return 1===t?p(n):y(t,function t(n,r,e){return function(){for(var o=[],u=0,i=n,c=0;c<r.length||u<arguments.length;){var a;c<r.length&&(!l(r[c])||u>=arguments.length)?a=r[c]:(a=arguments[u],u+=1),o[c]=a,l(a)||(i-=1),c+=1}return i<=0?e.apply(this,o):y(i,t(n,o,e))}}(t,[],n))})),v=Array.isArray||function(t){return null!=t&&t.length>=0&&"[object Array]"===Object.prototype.toString.call(t)};function g(t){return"function"==typeof t["@@transducer/step"]}function b(t,n,r){return function(){if(0===arguments.length)return r();var e=Array.prototype.slice.call(arguments,0),o=e.pop();if(!v(o)){for(var u=0;u<t.length;){if("function"==typeof o[t[u]])return o[t[u]].apply(o,e);u+=1}if(g(o)){var i=n.apply(null,e);return i(o)}}return r.apply(this,arguments)}}var O=function(){return this.xf["@@transducer/init"]()},m=function(t){return this.xf["@@transducer/result"](t)};var w=p((function(t){return!!v(t)||!!t&&("object"==typeof t&&(!function(t){return"[object String]"===Object.prototype.toString.call(t)}(t)&&(1===t.nodeType?!!t.length:0===t.length||t.length>0&&(t.hasOwnProperty(0)&&t.hasOwnProperty(t.length-1)))))})),j=function(){function t(t){this.f=t}return t.prototype["@@transducer/init"]=function(){throw new Error("init not implemented on XWrap")},t.prototype["@@transducer/result"]=function(t){return t},t.prototype["@@transducer/step"]=function(t,n){return this.f(t,n)},t}();var x=h((function(t,n){return y(t.length,(function(){return t.apply(n,arguments)}))}));function C(t,n,r){for(var e=r.next();!e.done;){if((n=t["@@transducer/step"](n,e.value))&&n["@@transducer/reduced"]){n=n["@@transducer/value"];break}e=r.next()}return t["@@transducer/result"](n)}function P(t,n,r,e){return t["@@transducer/result"](r[e](x(t["@@transducer/step"],t),n))}var S="undefined"!=typeof Symbol?Symbol.iterator:"@@iterator";function A(t,n,r){if("function"==typeof t&&(t=function(t){return new j(t)}(t)),w(r))return function(t,n,r){for(var e=0,o=r.length;e<o;){if((n=t["@@transducer/step"](n,r[e]))&&n["@@transducer/reduced"]){n=n["@@transducer/value"];break}e+=1}return t["@@transducer/result"](n)}(t,n,r);if("function"==typeof r["fantasy-land/reduce"])return P(t,n,r,"fantasy-land/reduce");if(null!=r[S])return C(t,n,r[S]());if("function"==typeof r.next)return C(t,n,r);if("function"==typeof r.reduce)return P(t,n,r,"reduce");throw new TypeError("reduce: list must be array or iterable")}function k(t,n){return Object.prototype.hasOwnProperty.call(n,t)}var E=Object.prototype.toString,$=!{toString:null}.propertyIsEnumerable("toString"),I=["constructor","valueOf","isPrototypeOf","toString","propertyIsEnumerable","hasOwnProperty","toLocaleString"],D=function(){return arguments.propertyIsEnumerable("length")}(),L=function(t,n){for(var r=0;r<t.length;){if(t[r]===n)return!0;r+=1}return!1},N=p("function"!=typeof Object.keys||D?function(t){if(Object(t)!==t)return[];var n,r,e=[],o=D&&function(){return"[object Arguments]"===E.call(arguments)?function(t){return"[object Arguments]"===E.call(t)}:function(t){return k("callee",t)}}(t);for(n in t)!k(n,t)||o&&"length"===n||(e[e.length]=n);if($)for(r=I.length-1;r>=0;)k(n=I[r],t)&&!L(e,n)&&(e[e.length]=n),r-=1;return e}:function(t){return Object(t)!==t?[]:Object.keys(t)}),z=p((function(t){return d(t.length,t)}));var B=function(){function t(t,n){this.xf=n,this.f=t}return t.prototype["@@transducer/init"]=O,t.prototype["@@transducer/result"]=m,t.prototype["@@transducer/step"]=function(t,n){return this.f(n)?this.xf["@@transducer/step"](t,n):t},t}(),T=h(b(["filter"],h((function(t,n){return new B(t,n)})),(function(t,n){return r=n,"[object Object]"===Object.prototype.toString.call(r)?A((function(r,e){return t(n[e])&&(r[e]=n[e]),r}),{},N(n)):function(t,n){for(var r=0,e=n.length,o=[];r<e;)t(n[r])&&(o[o.length]=n[r]),r+=1;return o}(t,n);var r}))),F=function(){function t(t,n){this.xf=n,this.f=t,this.found=!1}return t.prototype["@@transducer/init"]=O,t.prototype["@@transducer/result"]=function(t){return this.found||(t=this.xf["@@transducer/step"](t,void 0)),this.xf["@@transducer/result"](t)},t.prototype["@@transducer/step"]=function(t,n){var r;return this.f(n)&&(this.found=!0,t=(r=this.xf["@@transducer/step"](t,n))&&r["@@transducer/reduced"]?r:{"@@transducer/value":r,"@@transducer/reduced":!0}),t},t}(),U=h(b(["find"],h((function(t,n){return new F(t,n)})),(function(t,n){for(var r=0,e=n.length;r<e;){if(t(n[r]))return n[r];r+=1}})));function W(t){return t}var X=p(W);var Z="function"==typeof Object.assign?Object.assign:function(t){if(null==t)throw new TypeError("Cannot convert undefined or null to object");for(var n=Object(t),r=1,e=arguments.length;r<e;){var o=arguments[r];if(null!=o)for(var u in o)k(u,o)&&(n[u]=o[u]);r+=1}return n},_=h((function(t,n){var r={};return y(n.length,(function(){var e=t.apply(this,arguments);return k(e,r)||(r[e]=n.apply(this,arguments)),r[e]}))})),q=h((function(t,n){return Z({},t,n)})),G=z((function(t,n){return!!U((function(t){return t===n}),t)})),H=function(t){return t.preventDefault()},J=/-(\w)/g,K=(_(X,(function(t){return t.replace(J,(function(t,n){return n?n.toUpperCase():""}))})),/\B([A-Z])/g),M=_(X,(function(t){return t.replace(K,"-$1").toLowerCase()})),Q={container:"div",containerClass:"dialog-wrapper",transitionName:"fade",containerStyle:{zIndex:999},closeButtonClass:"close-btn"},R={awaitClose:!0},V=t.extend({name:"abc",data:function(){return{visible:!0,id:"",closed:!1,onClose:function(t,n){for(var r=[],e=2;e<arguments.length;e++)r[e-2]=arguments[e]}}},watch:{closed:function(t){t&&(this.visible=!1)}},methods:{close:function(t){for(var n=[],r=1;r<arguments.length;r++)n[r-1]=arguments[r];this.closed=!0,this.onClose&&"function"==typeof this.onClose&&this.onClose.apply(this,f([this,t],n))},handleAfterLeave:function(){this.$destroy(),this.$el&&this.$el.parentNode&&this.$el.parentNode.removeChild(this.$el)}}}),Y=function(t,n){return function(r){return new Promise((function(o,u){var i=q(R,r),c=i.type,a=i.props,l=void 0===a?{text:"hi father",a:"s"}:a,p=i.awaitClose,h=(i.containerStyle,i.maskClosable),y=i.containerClass,d=p?function(t,n){o({instance:t,type:n})}:r.onClose,v=t[c];if(!v)throw Error("not have dialog of this type, "+c);var g=G(v),b=new V({data:function(){return{onClose:d}},render:function(t){var o=this,u=T((function(t){return!("string"==typeof t||!t.component)}),v).map((function(n){var u=n.component,i=n.on,c=n.slot,a=n.className,p=n.ref,h=r.on,y=h?q(i||{},h):i,d={close:function(t){void 0===t&&(t="close");for(var n=[],r=1;r<arguments.length;r++)n[r-1]=arguments[r];return o.close.apply(o,f([t],n))}},v=y?Object.keys(y).reduce((function(t,n){var r=y[n];return"function"==typeof r?t[n]=function(t){for(var n=[],e=1;e<arguments.length;e++)n[e-1]=arguments[e];r.apply(void 0,f([o,t],n))}:("div"!==u&&u.name===r.name||"div"===u&&r.name===a)&&(t[n]=function(t){for(var n=[],e=1;e<arguments.length;e++)n[e-1]=arguments[e];r.fn.apply(r,f([o,t],n))}),t}),{}):{},g=q(d,v),b=q(n.defaultProps||{},l);return t(u,s([{attrs:e({},b),ref:p},{on:g},{class:a}]),[c])})),i=q(Q,n||{}),a=i.container,p=i.containerClass,d=i.conatainerProps,b=i.transitionName,O=i.containerStyle,m=i.closeButtonClass,w=i.maskClosable,j=[];g("close")&&j.push(t("div",{style:{zIndex:2},class:m,on:{click:function(){return o.close("close")}}}));var x,C=[M(c)];return p&&C.push(p),y&&C.push(y),t("transition",{attrs:{name:b},on:{afterLeave:this.handleAfterLeave}},[t("div",{directives:[{name:"show",value:this.visible}],class:"fixed-wrapper",on:{touchmove:H},attrs:e({},d),style:O},[t(a,{ref:"body",style:{zIndex:1},class:(x=C,x.reduce((function(t,n){return t+=" "+n}),""))},[j,u]),t("div",{style:{zIndex:0},on:{click:function(){(h||w)&&o.close("close")}},class:"mask-wrapper"})])])}});b.$mount(),document.body.appendChild(b.$el),p||o({instance:b,type:"instance"})}))}};export{Y as createVfModal};
+const findKey = curry((arr, key) => !!find(e => e === key, arr));
+const prevent = e => e.preventDefault();
+const generateClass = list => list.reduce((res, cur) => {
+  res += ' ' + cur;
+  return res;
+}, ''); // copy from vue3
+
+const camelizeRE = /-(\w)/g;
+const camelize = memoizeWith(identity, str => {
+  return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : '');
+});
+const hyphenateRE = /\B([A-Z])/g;
+const hyphenate = memoizeWith(identity, str => {
+  return str.replace(hyphenateRE, '-$1').toLowerCase();
+});
+
+const defaultBaseConfig = {
+  container: 'div',
+  containerClass: 'dialog-wrapper',
+  transitionName: 'fade',
+  containerStyle: {
+    zIndex: 999
+  },
+  closeButtonClass: 'close-btn'
+};
+const defaultRunConfig = {
+  awaitClose: true
+};
+const Component = Vue.extend({
+  name: 'abc',
+
+  data() {
+    return {
+      visible: true,
+      id: '',
+      closed: false,
+      onClose: (instance, type, ...args) => {}
+    };
+  },
+
+  watch: {
+    closed(newVal) {
+      if (newVal) {
+        this.visible = false;
+      }
+    }
+
+  },
+  methods: {
+    /**
+     * close modal
+     */
+    close(type, ...args) {
+      this.closed = true;
+
+      if (this.onClose && typeof this.onClose === 'function') {
+        this.onClose(this, type, ...args);
+      }
+    },
+
+    handleAfterLeave() {
+      this.$destroy();
+      if (this.$el && this.$el.parentNode) this.$el.parentNode.removeChild(this.$el);
+    }
+
+  }
+});
+const zIndex = 0;
+
+const createVfModal = (modalTypesGroup, createConfig) => config => {
+  return new Promise((resolve, reject) => {
+    const {
+      type,
+      props = {
+        text: 'hi father',
+        a: 's'
+      },
+      awaitClose,
+      containerStyle: runContainerStyle = {},
+      maskClosable: runMaskClosalbe,
+      containerClass: runContainerClass
+    } = merge(defaultRunConfig, config);
+    const onClose = awaitClose ? (instance, type) => {
+      resolve({
+        instance,
+        type
+      });
+    } : config.onClose;
+    const customList = modalTypesGroup[type];
+    if (!customList) throw Error(`not have dialog of this type, ${type}`);
+    const checkType = findKey(customList);
+    const instance = new Component({
+      data() {
+        return {
+          onClose
+        };
+      },
+
+      render: function (h) {
+        const temp = filter(e => !!(typeof e !== 'string' && e.component), customList);
+        const customNode = temp.map(el => {
+          const {
+            component,
+            on: elOn,
+            slot,
+            className,
+            ref
+          } = el;
+          const {
+            on: runOn
+          } = config;
+          const on = runOn ? merge(elOn || {}, runOn) : elOn;
+          const defaultL = {
+            // 监听组件中调用的```close```事件，关闭modal
+            close: (type = 'close', ...args) => this.close(type, ...args)
+          }; // 传入instance
+
+          const l = on ? Object.keys(on).reduce((res, cur) => {
+            const listener = on[cur];
+
+            if (typeof listener === 'function') {
+              res[cur] = (type, ...args) => {
+                listener(this, type, ...args);
+              };
+            } else if (component !== 'div' && component.name === listener.name || component === 'div' && listener.name === className) {
+              res[cur] = (type, ...args) => {
+                listener.fn(this, type, ...args);
+              };
+            }
+
+            return res; // todo fix type
+          }, {}) : {};
+          const ll = merge(defaultL, l);
+          const attrs = merge(el.defaultProps || {}, props);
+          return h(component, helper([{
+            "attrs": { ...attrs
+            },
+            "ref": ref
+          }, {
+            "on": ll
+          }, {
+            "class": className
+          }]), [slot]);
+        });
+        const {
+          container,
+          containerClass,
+          conatainerProps: baseAttrs,
+          transitionName,
+          containerStyle,
+          closeButtonClass,
+          maskClosable
+        } = merge(defaultBaseConfig, createConfig || {});
+        const defaultNode = [];
+
+        if (checkType('close')) {
+          defaultNode.push(h("div", {
+            "style": {
+              zIndex: zIndex + 2
+            },
+            "class": closeButtonClass,
+            "on": {
+              "click": () => this.close('close')
+            }
+          }));
+        }
+
+        const maskClickHandler = () => {
+          if (runMaskClosalbe || maskClosable) {
+            this.close('close');
+          }
+        };
+
+        const containerClassList = [hyphenate(type)];
+        if (containerClass) containerClassList.push(containerClass);
+        if (runContainerClass) containerClassList.push(runContainerClass);
+        return h("transition", {
+          "attrs": {
+            "name": transitionName
+          },
+          "on": {
+            "afterLeave": this.handleAfterLeave
+          }
+        }, [h("div", {
+          "directives": [{
+            name: "show",
+            value: this.visible
+          }],
+          "class": "fixed-wrapper",
+          "on": {
+            "touchmove": prevent
+          },
+          "attrs": { ...baseAttrs
+          },
+          "style": containerStyle
+        }, [h(container, {
+          "ref": 'body',
+          "style": {
+            zIndex: zIndex + 1
+          },
+          "class": generateClass(containerClassList)
+        }, [defaultNode, customNode]), h("div", {
+          "style": {
+            zIndex
+          },
+          "on": {
+            "click": maskClickHandler
+          },
+          "class": "mask-wrapper"
+        })])]);
+      }
+    });
+    instance.$mount();
+    document.body.appendChild(instance.$el);
+
+    if (!awaitClose) {
+      resolve({
+        instance,
+        type: 'instance'
+      });
+    }
+  });
+};
+
+export { createVfModal };

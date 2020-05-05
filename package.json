@@ -1,6 +1,6 @@
 {
   "name": "vf-modal",
-  "version": "0.0.4",
+  "version": "0.0.5-beta.0",
   "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@types/ramda": "^0.27.3",
+    "ramda": "^0.27.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "vue": "^2.6.11"
   },

@@ -1,6 +1,6 @@
 const execa = require('execa')
 
-const target = 'esm'
+const target = 'es'
 
 execa(
   'rollup',
