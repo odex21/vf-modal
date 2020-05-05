@@ -1,7 +1,7 @@
 const execa = require('execa')
 
-const target = 'esm'
-
+const target = 'es'
+process.env.NODE_ENV = 'development'
 execa(
   'rollup',
   [

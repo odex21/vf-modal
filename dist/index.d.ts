@@ -1,6 +1,6 @@
-import './styles/index.styl';
 import Vue from 'vue';
 import { VueConstructor } from 'vue/types/vue';
+import { ComponentOptions } from 'vue/types/options';
 import * as CSS from 'csstype';
 export declare type Listener<T> = (instance: T, type: CloseType, ...args: any[]) => any;
 export interface ListenerGroup<T> {
@@ -13,7 +13,7 @@ export interface RunListenerGroup<T> {
     } | Listener<T>;
 }
 export interface ModalComponent<T> {
-    component: VueConstructor | 'div';
+    component: VueConstructor | ComponentOptions<Vue> | 'div';
     defaultProps?: Record<string, any>;
     slot?: string;
     on?: ListenerGroup<T>;

@@ -40,6 +40,7 @@ const external = [
 if (TARGET === 'es') {
   external.push('ramda')
 }
+console.log(process.env.NODE_ENV)
 
 const MODE = process.env.MODE || 'dev'
 
@@ -67,7 +68,7 @@ const plugins = [
       ...DEFAULT_EXTENSIONS,
       '.ts',
       '.tsx'
-    ]
+    ],
   }),
   commonjs(),
   stylus(),

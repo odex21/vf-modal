@@ -9,11 +9,13 @@ const generateClass = list => list.reduce((res, cur) => {
   res += ' ' + cur;
   return res;
 }, ''); // copy from vue3
+// const camelizeRE = /-(\w)/g
+// export const camelize = memoizeWith(identity,
+//   (str: string): string => {
+//     return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''))
+//   }
+// )
 
-const camelizeRE = /-(\w)/g;
-const camelize = memoizeWith(identity, str => {
-  return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : '');
-});
 const hyphenateRE = /\B([A-Z])/g;
 const hyphenate = memoizeWith(identity, str => {
   return str.replace(hyphenateRE, '-$1').toLowerCase();
@@ -76,10 +78,7 @@ const createVfModal = (modalTypesGroup, createConfig) => config => {
   return new Promise((resolve, reject) => {
     const {
       type,
-      props = {
-        text: 'hi father',
-        a: 's'
-      },
+      props = {},
       awaitClose,
       containerStyle: runContainerStyle = {},
       maskClosable: runMaskClosalbe,
@@ -92,7 +91,7 @@ const createVfModal = (modalTypesGroup, createConfig) => config => {
       });
     } : config.onClose;
     const customList = modalTypesGroup[type];
-    if (!customList) throw Error(`not have dialog of this type, ${type}`);
+    if (!customList) throw Error(`not has modal of this type, ${type}`);
     const checkType = findKey(customList);
     const instance = new Component({
       data() {
@@ -140,6 +139,7 @@ const createVfModal = (modalTypesGroup, createConfig) => config => {
           return h(component, helper([{
             "attrs": { ...attrs
             },
+            "style": runContainerStyle,
             "ref": ref
           }, {
             "on": ll
@@ -160,6 +160,7 @@ const createVfModal = (modalTypesGroup, createConfig) => config => {
 
         if (checkType('close')) {
           defaultNode.push(h("div", {
+            "ref": "closeButton",
             "style": {
               zIndex: zIndex + 2
             },

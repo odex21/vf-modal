@@ -13,12 +13,12 @@ export const generateClass = (list: string[]) =>
 
 
 // copy from vue3
-const camelizeRE = /-(\w)/g
-export const camelize = memoizeWith(identity,
-  (str: string): string => {
-    return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''))
-  }
-)
+// const camelizeRE = /-(\w)/g
+// export const camelize = memoizeWith(identity,
+//   (str: string): string => {
+//     return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''))
+//   }
+// )
 
 const hyphenateRE = /\B([A-Z])/g
 export const hyphenate = memoizeWith(identity,

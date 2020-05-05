@@ -1,3 +1,4 @@
+process.env.NODE_ENV = 'production'
 const execa = require('execa')
 
 const target = 'es'

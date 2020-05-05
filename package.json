@@ -1,6 +1,6 @@
 {
   "name": "vf-modal",
-  "version": "0.0.5-beta.0",
+  "version": "0.0.5-beta.1",
   "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "dev:esm": "node scripts/dev.js"
+    "dev:esm": "node scripts/dev.js",
+    "test": "jest"
   },
   "dependencies": {
     "@types/ramda": "^0.27.3",
@@ -25,10 +26,17 @@
     "@babel/preset-typescript": "^7.9.0",
     "@rollup/plugin-commonjs": "^11.1.0",
     "@rollup/plugin-node-resolve": "^7.1.3",
+    "@types/jest": "^25.2.1",
     "@vue/babel-preset-jsx": "^1.1.2",
+    "@vue/test-utils": "^1.0.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^26.0.1",
     "babel-plugin-ramda": "^2.0.0",
+    "babel-preset-env": "^1.7.0",
     "csstype": "^3.0.0-beta.3",
     "execa": "^4.0.0",
+    "jest": "^25.5.4",
+    "jest-environment-jsdom-fifteen": "^1.0.2",
     "rollup": "^2.6.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-clear": "^2.0.7",
@@ -38,6 +46,9 @@
     "rollup-plugin-stylus-compiler": "^1.0.1",
     "rollup-plugin-terser": "^5.3.0",
     "rollup-plugin-typescript2": "^0.27.0",
-    "typescript": "^3.8.3"
+    "ts-jest": "25.2.1",
+    "typescript": "^3.8.3",
+    "vue-jest": "^3.0.5",
+    "vue-template-compiler": "^2.6.11"
   }
 }

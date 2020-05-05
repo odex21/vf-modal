@@ -1,9 +1,10 @@
-import './styles/index.styl'
+// import './styles/index.styl'
 
 import Vue from 'vue'
 import { prevent, generateClass, findKey, hyphenate } from './utils'
 import { filter, merge } from 'ramda'
 import { VueConstructor } from 'vue/types/vue'
+import { ComponentOptions } from 'vue/types/options'
 import * as CSS from 'csstype'
 
 export type Listener<T> = (instance: T, type: CloseType, ...args: any[]) => any
@@ -19,7 +20,7 @@ export interface RunListenerGroup<T> {
 }
 
 export interface ModalComponent<T> {
-  component: VueConstructor | 'div'
+  component: VueConstructor | ComponentOptions<Vue> | 'div'
   defaultProps?: Record<string, any>
   slot?: string
   on?: ListenerGroup<T>
@@ -125,7 +126,7 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
 
       const {
         type,
-        props = { text: 'hi father', a: 's' },
+        props = {},
         awaitClose,
         containerStyle: runContainerStyle = {},
         maskClosable: runMaskClosalbe,
@@ -139,7 +140,7 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
 
 
       const customList = modalTypesGroup[ type ]
-      if (!customList) throw Error(`not have dialog of this type, ${type}`)
+      if (!customList) throw Error(`not has modal of this type, ${type}`)
 
       const checkType = findKey(customList)
 
@@ -184,6 +185,7 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
             return (
               <component
                 {...{ attrs, }}
+                style={runContainerStyle}
                 ref={ref}
                 on={ll}
                 class={className}
@@ -203,7 +205,7 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
 
           const defaultNode = []
           if (checkType('close')) {
-            defaultNode.push(<div style={{ zIndex: zIndex + 2 }} class={closeButtonClass} onClick={() => this.close('close')}></div>)
+            defaultNode.push(<div ref="closeButton" style={{ zIndex: zIndex + 2 }} class={closeButtonClass} onClick={() => this.close('close')}></div>)
           }
 
 

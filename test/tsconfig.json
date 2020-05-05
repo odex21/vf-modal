@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es5",
+    // "module": "e",
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
@@ -30,8 +30,10 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "src/index.tsx",
+    "./**/*.ts",
+    "./**/*.spec.ts",
+    "./*.tsx",
+    "bbb.spec.js"
   ],
   "exclude": [
     "node_modules"
