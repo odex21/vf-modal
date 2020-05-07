@@ -1,4 +1,4 @@
-// import './styles/index.styl'
+import './styles/index.styl'
 
 import Vue from 'vue'
 import { prevent, generateClass, findKey, hyphenate } from './utils'

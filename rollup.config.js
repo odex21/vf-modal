@@ -6,7 +6,6 @@ import resolve from '@rollup/plugin-node-resolve'
 import { DEFAULT_EXTENSIONS } from '@babel/core'
 import stylus from 'rollup-plugin-stylus-compiler'
 import css from 'rollup-plugin-css-porter'
-import { terser } from "rollup-plugin-terser"
 const extensions = [DEFAULT_EXTENSIONS]
 import commonjs from 'rollup-plugin-commonjs'
 
@@ -74,10 +73,6 @@ const plugins = [
   stylus(),
   css()
 ]
-if (MODE === 'production') {
-  plugins.push(terser())
-}
-
 
 export default {
   input: 'src/index.tsx',

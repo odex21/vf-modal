@@ -1,3 +1,4 @@
+import './styles/index.styl';
 import Vue from 'vue';
 import { VueConstructor } from 'vue/types/vue';
 import { ComponentOptions } from 'vue/types/options';
