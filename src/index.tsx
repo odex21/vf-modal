@@ -159,8 +159,8 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
             const on = runOn ? merge(elOn || {}, runOn) : elOn
 
             const defaultL = {
-              // 监听组件中调用的```close```事件，关闭modal
-              close: (type: CloseType = 'close', ...args: any[]) => this.close(type, ...args),
+              // 监听组件中调用的`close`事件，关闭modal
+              close: (type: CloseType, ...args: any[]) => this.close(type, ...args),
             }
 
             // 传入instance

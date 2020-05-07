@@ -5,6 +5,7 @@ import Counter from './components/counter'
 import { createVfModal } from '../src/index'
 import Base from './components/Base.vue'
 import Vue from 'vue'
+import { sleep } from './utils'
 
 // import { ComponentOptions } from 'vue/types/options'
 // type A = typeof Counter
@@ -154,7 +155,7 @@ describe('close event handler', () => {
       })
 
       const wrapper = createWrapper(instance)
-      const button = wrapper.find({ ref: "closeButton" })
+      const button = wrapper.findComponent({ ref: "closeButton" })
       expect(button.exists()).toBe(true)
       button.trigger('click')
     })
@@ -182,14 +183,42 @@ describe('close event handler', () => {
     })
     const getWrapper = async () => {
       const { instance } = await dialog({ type: 'abCd', awaitClose: false })
-      return createWrapper(instance)
+      return { wrapper: createWrapper(instance), instance }
     }
 
 
-    const wrapper = await getWrapper()
+    const { instance, wrapper } = await getWrapper()
     const mask = wrapper.find('.mask-wrapper')
     mask.trigger('click')
-    expect((wrapper.vm as any).closed).toBe(false)
+    expect(instance.closed).toBe(false)
+    await Vue.nextTick()
+    expect(instance.visible).toBe(true)
+
+  })
+
+
+
+  it('change closed on instance, closed only can be used to close modal', async () => {
+    const dialog = createVfModal({
+      abCd: [
+        {
+          component: Base,
+          ref: 'base',
+        }
+      ]
+    })
+    const { instance } = await dialog({ type: 'abCd', awaitClose: false })
+
+    instance.closed = true
+    await Vue.nextTick()
+    expect(instance.visible).toBe(false)
+
+    instance.closed = false
+    await Vue.nextTick()
+    expect(instance.visible).toBe(false)
+
+    // await  transition
+    await sleep(1000)
   })
 })
 

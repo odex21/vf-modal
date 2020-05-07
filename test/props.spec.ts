@@ -1,9 +1,8 @@
 import { createWrapper } from '@vue/test-utils'
 import { createVfModal } from '../src/index'
 import ModeA from './components/ModeA.vue'
-// import Vue from 'vue'
 
-describe('test prpos', () => {
+describe.only('test prpos', () => {
   const dialog = createVfModal({
     test: [
       {
@@ -45,13 +44,6 @@ describe('test prpos', () => {
         event: (instance, ...args) => {
           [ type, a, b ] = args
         },
-        // customEvent: {
-        //   name: 'test',
-        //   fn: (instance, ...args) => {
-        //     console.log(...args);
-        //     [ type, a, b ] = args
-        //   }
-        // }
         customEvent: {
           name: 'test',
           fn: (instance, ...args) => {
@@ -70,10 +62,8 @@ describe('test prpos', () => {
     expect(b).toBe(123)
 
 
-    // customButton.trigger('click')
-    // expect(type).toBe('customEvent')
-    // expect(a).toBe('test')
-    // expect(b).toBe(123)
+    customButton.trigger('click')
+    expect(type).toBe('customEvent')
   })
 
 

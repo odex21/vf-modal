@@ -8,14 +8,11 @@ const prevent = e => e.preventDefault();
 const generateClass = list => list.reduce((res, cur) => {
   res += ' ' + cur;
   return res;
-}, ''); // copy from vue3
-// const camelizeRE = /-(\w)/g
-// export const camelize = memoizeWith(identity,
-//   (str: string): string => {
-//     return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''))
-//   }
-// )
-
+}, '');
+const camelizeRE = /-(\w)/g;
+const camelize = memoizeWith(identity, str => {
+  return str.replace(camelizeRE, (_, c) => c.toUpperCase());
+});
 const hyphenateRE = /\B([A-Z])/g;
 const hyphenate = memoizeWith(identity, str => {
   return str.replace(hyphenateRE, '-$1').toLowerCase();
@@ -115,8 +112,8 @@ const createVfModal = (modalTypesGroup, createConfig) => config => {
           } = config;
           const on = runOn ? merge(elOn || {}, runOn) : elOn;
           const defaultL = {
-            // 监听组件中调用的```close```事件，关闭modal
-            close: (type = 'close', ...args) => this.close(type, ...args)
+            // 监听组件中调用的`close`事件，关闭modal
+            close: (type, ...args) => this.close(type, ...args)
           }; // 传入instance
 
           const l = on ? Object.keys(on).reduce((res, cur) => {

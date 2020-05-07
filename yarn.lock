@@ -1437,9 +1437,9 @@
     camelcase "^5.0.0"
 
 "@vue/test-utils@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.npm.taobao.org/@vue/test-utils/download/@vue/test-utils-1.0.0.tgz#02e81ec674a45c694e95be2e06116a7275819c7b"
-  integrity sha1-AugexnSkXGlOlb4uBhFqcnWBnHs=
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/@vue/test-utils/download/@vue/test-utils-1.0.2.tgz#68134747cb88d996e4c9703ca4b103b4d23fda14"
+  integrity sha1-aBNHR8uI2ZbkyXA8pLEDtNI/2hQ=
   dependencies:
     dom-event-types "^1.0.0"
     lodash "^4.17.15"
@@ -3372,7 +3372,7 @@ is-arrayish@^0.2.1:
 
 is-buffer@^1.1.5:
   version "1.1.6"
-  resolved "https://registry.npm.taobao.org/is-buffer/download/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
+  resolved "https://registry.npm.taobao.org/is-buffer/download/is-buffer-1.1.6.tgz?cache=0&sync_timestamp=1588707106955&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fis-buffer%2Fdownload%2Fis-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha1-76ouqdqg16suoTqXsritUf776L4=
 
 is-callable@^1.1.4, is-callable@^1.1.5:
