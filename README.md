@@ -7,9 +7,84 @@
 ```bash
 $ npm install vf-modal
 $ yarn add vf-modal
+
+```
+### Start 
+
+>  为了 vf-modal 更轻量，它被简单的编译为esnext，这样可以去除可能和项目中重复的polyfill
+
+1. Config Webpack or Vue Cli
+    将vf-modal加入项目的babel编译
+   - Vue Cli
+      ```js
+      module.exports = {
+        transpileDependencies: ['vf-modal']
+      }
+      ```
+  - Webpack
+    ```js
+    module.exports = {
+      modules: {
+        rules: [
+          test: /\.m?js$/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true
+            },
+          },
+          include: [
+           path.resolve(__dirname, '../src'),
+            /vf-modal/
+          ]
+        ]
+      }
+    },
+    ```
+
+### Usage 
+
+#### Create a vfModal
+
+```js
+import { createVfModal } from 'vf-modal'
+import 'vf-modal/dist/index.min.css'
+
+const modal = createVfModal({
+  error: [
+    {
+      component: ErrorComponent
+    }
+  ],
+  success: [
+    {
+      //success maybe a simple modal with a picture
+      component: 'div',
+      className: 'custom-div'
+    }
+  ]
+})
 ```
 
-### Example:
+#### Open a modal in anywhere
+
+```js
+modal({type: 'success'})
+
+modal({
+  type: 'error', 
+  props: {
+    msg: 'something',
+    type: 'net'
+  }
+})
+```
+
+### Docs
+
+Soon.
+
+### Full Example:
 
 ```html
   <button onclick="openModal()">open modal</button>
@@ -17,9 +92,9 @@ $ yarn add vf-modal
 
 ```js
 
-import { createVfModal } from 'vf-mdodal'
 // 引入默认样式
 import 'vf-modal/dist/index.min.css'
+import { createVfModal } from 'vf-mdodal'
 
 const Dialog = createVfModal(
   // modal 配置对象
