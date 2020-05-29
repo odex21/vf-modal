@@ -58,3 +58,46 @@
   right: 0
   background: rgba(0, 0, 0, 0.6)
 }
+
+.fade {
+  transition: opacity 50ms ease
+}
+
+.group-move {
+  transition: transform 50ms ease
+}
+
+.fade-appear, .fade-enter, .fade-leave-active {
+  opacity: 0
+}
+
+enterTime = 0.3s
+leaveTime = 0.3s
+
+.fade-anim-leave-active, .fade-anim-enter-active {
+  animation: fade-enter leaveTime
+}
+
+.fade-anim-long-enter-active, .fade-anim-long-leave-active {
+  animation: fade-enter enterTime
+}
+
+@keyframes fade-enter {
+  from {
+    opacity: 0
+  }
+
+  to {
+    opacity: 1
+  }
+}
+
+@keyframes fade-leave {
+  from {
+    opacity: 1
+  }
+
+  to {
+    opacity: 0
+  }
+}

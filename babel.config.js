@@ -1,21 +1,11 @@
 module.exports = {
   "presets": [
-    [
-      "@vue/babel-preset-jsx",
-      {
-        "vModel": false
-      }
-    ]
+    "@babel/preset-typescript"
   ],
+  "plugins": [ "@ant-design-vue/babel-plugin-jsx" ],
   "env": {
     "test": {
       "presets": [
-        [
-          "@vue/babel-preset-jsx",
-          {
-            "vModel": false
-          }
-        ],
         "@babel/preset-typescript",
         [
           "@babel/preset-env",

@@ -236,13 +236,24 @@ describe('custom options', () => {
     containerStyle: {
       background: 'red'
     },
-    maskClosable: true,
-
+    maskClosable: true
   })
   const getWrapper = async () => {
     const { instance } = await dialog({ type: 'abCd', awaitClose: false })
     return createWrapper(instance)
   }
+
+  const dialog2 = createVfModal({
+    abCd: [
+      {
+        component: Base,
+        ref: 'base',
+      }
+    ]
+  }, {
+    maskClosable: true,
+    maskWrapperClass: 'custom-mask-wrapper'
+  })
 
   it('hyphenate class', async () => {
     const wrapper = await getWrapper()
@@ -281,6 +292,17 @@ describe('custom options', () => {
     const body = wrapper.vm.$refs.body
     expect([ ...(body as any).classList ].some(e => e === 'custom-wrapper')).toBe(true)
     expect([ ...(body as any).classList ].some(e => e === 'run-time')).toBe(true)
+  })
+
+
+  it('custom mask-wrapper', async () => {
+    const { instance } = await dialog2({
+      type: 'abCd',
+      awaitClose: false,
+    })
+    const wrapper = createWrapper(instance)
+    const body = wrapper.vm.$refs.body
+    expect(wrapper.find('.custom-mask-wrapper')).not.toBeNull()
   })
 
 })

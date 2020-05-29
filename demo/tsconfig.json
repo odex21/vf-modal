@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "paths": {
+      "/@/*": [
+        "./*"
+      ],
+      "/vf-modal/*": [
+        "../dist/*"
+      ],
+    },
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable",
+      "ES2015",
+      "ES5"
+    ],
+  },
+  "include": [
+    "src",
+  ],
+  "exclude": []
+}
