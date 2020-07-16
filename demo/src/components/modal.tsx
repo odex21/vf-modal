@@ -1,4 +1,4 @@
-import { createVfModal, ModalTypesGroup } from '/vf-modal/index'
+import { createVfModal } from '/vf-modal/index'
 import NetError from './modals/NetError.vue'
 import '/vf-modal/index.css'
 import { ComponentProps } from '/@/../dist/props'
@@ -25,35 +25,9 @@ const ApiError = defineComponent({
     </>
   }
 })
-type bbb = typeof ApiError
-type ccc = bbb[ 'setup' ]
-type aaa = ComponentProps<typeof ApiError>
 
-type dddd = (typeof vf({ type: 'test' }))
-type eee = typeof opt
-type CVFProps = dddd<'test', eee[ 'test' ]>// extends (opt: (infer U)) => any ? U : never
-
-const opt: ModalTypesGroup = {
-  test: {
-    component: ApiError,
-    closeButton: true
-  }
-}
-export const vf = createVfModal(opt)
+export const vf = createVfModal('test', ApiError, {
+  injectionKey: Symbol()
+})
 
 
-
-export const testModal = () => {
-  const back = vf({
-    type: 'test',
-    props: {
-      msg: 'df',
-    },
-    on: {
-      close: (a, b, c) => {
-        a.$props
-      }
-    }
-  })
-  console.log(back)
-}

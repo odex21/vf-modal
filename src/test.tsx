@@ -1,63 +1,67 @@
-import { createApp, defineComponent, App, createVNode, PropType } from 'vue'
+import {
+  createApp, defineComponent, App, createVNode,
+  PropType, toRefs, InjectionKey, inject, provide, reactive, ref,
+} from 'vue'
+
+import { VFModal } from './Modal'
 
 
 
-interface TProps {
-  val: string
+interface ApiErrorState {
+  msg: string
+  code: number
 }
 
-const Modal = defineComponent({
+const ApiErrorInjectionKey: InjectionKey<ApiErrorState> = Symbol()
+
+
+const ApiError = defineComponent({
   props: {
     msg: {
-      required: false,
-      type: String,
+      default: 'hello',
+      required: true,
+      type: String
     },
-    complexProps: {
-      required: false,
-      type: Object as PropType<{
-        a: {
-          b: number
-        },
-        c: string
-      }>
+    no: {
+      default: 1,
+      required: true,
+      type: Number
     }
   },
-  setup (props) {
-    return () => {
+  setup (props, { attrs }) {
+    const { msg } = toRefs(props)
+    provide(ApiErrorInjectionKey, {
+      code: 10086,
+      msg: 'api test'
+    })
 
-      const slots = {
-        default: () => [ <p>default</p> ],
-        foo: (props: TProps) => [ <p>{props.val}</p> ]
-      }
-
-      return <div>{slots}</div>
-
-    }
+    return <>
+      <p>Api Error</p>
+      <p> msg:{msg.value}</p>
+    </>
   }
 })
 
 
-type Writeable<T> = { -readonly [ P in keyof T ]: T[ P ] }
-let modalContainerElem: HTMLElement
+const store = reactive({
+  state: {
+    n: 1,
+  },
+  inc () {
+    store.state.n++
+  },
+})
 
-type ComponentProps<T extends { setup?: any }> = Writeable<
-  T[ 'setup' ] extends
-  ((this: void, props: (infer U), ctx: any) => any) | undefined ?
-  U : never>
+const Store: InjectionKey<typeof store> = Symbol()
 
-type a = Writeable<ComponentProps<typeof Modal>>
-
-
-
-export const createModal = (_app?: App) => {
-  if (!modalContainerElem) {
-    modalContainerElem = document.createElement('div')
-    modalContainerElem.id = 'vf-modal-container'
-    document.body.appendChild(modalContainerElem)
-  }
-  const node = createVNode(Modal, {
-    msg: 123,
-  }, [ 'c h' ])
-  const app = createApp(Modal)
-  app.mount(modalContainerElem)
+const provideStore = () => {
+  provide(Store, store)
 }
+
+const useStore = () => inject(Store)
+
+const vf = new VFModal({
+  test: ApiError
+}, provideStore)
+
+

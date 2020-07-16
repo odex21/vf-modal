@@ -8,6 +8,7 @@ import stylus from 'rollup-plugin-stylus-compiler'
 import css from 'rollup-plugin-css-porter'
 const extensions = [ ...DEFAULT_EXTENSIONS, '.ts', '.tsx' ]
 import commonjs from 'rollup-plugin-commonjs'
+import { terser } from 'rollup-plugin-terser'
 
 // const TARGET = process.env.TARGET
 // if (!TARGET) {
@@ -28,31 +29,35 @@ const external = [
 ]
 
 
-console.log(process.env.NODE_ENV)
+console.log( process.env.NODE_ENV )
 
 const MODE = process.env.MODE || 'dev'
 
 const plugins = [
-  clear({
+  clear( {
     targets: [ 'dist' ],
     watch: true,
-  }),
-  resolve({
+  } ),
+  resolve( {
     browser: true,
     preferBuiltins: false,
     extensions,
-  }),
-  typescript({
+  } ),
+  typescript( {
     tsconfig: 'tsconfig.json',
-  }),
-  babel({
+  } ),
+  babel( {
     exclude: 'node_modules/**', // only transpile our source code
     extensions,
-  }),
+  } ),
   commonjs(),
   stylus(),
-  css()
+  css(),
 ]
+
+if ( MODE === 'production' ) {
+  plugins.push( terser() )
+}
 
 export default {
   input: 'src/index.tsx',

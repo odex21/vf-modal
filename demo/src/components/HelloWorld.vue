@@ -2,16 +2,24 @@
   <h1>{{ msg }}</h1>
   <button @click="count++">count is: {{ count }}</button>
   <p>
-    Edit <code>components/HelloWorld.vue</code> to test hot module replacement.
+    Edit
+    <code>components/HelloWorld.vue</code> to test hot module replacement.
   </p>
+  <p>
+    <button @click="openModal('test')">open modal</button>
+  </p>
+  <modal-test />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import {  testModal } from './modal'
+import { defineComponent, ref, onMounted, nextTick } from 'vue'
+import { ModalTest, Controller } from './modalA'
 
 export default defineComponent({
   name: 'HelloWorld',
+  components: {
+    ModalTest
+  },
   props: {
     msg: {
       default: '',
@@ -20,11 +28,15 @@ export default defineComponent({
   },
   setup () {
     const count = ref(0)
+    const openModal = () => Controller.open('test')
+
     onMounted(() => {
-      testModal()
+      // openModal()
     })
+
     return {
-      count
+      count,
+      openModal
     }
   }
 })
