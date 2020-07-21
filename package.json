@@ -16,9 +16,13 @@
     "babel": "babel src/test.tsx --config-file ./babel.config.js",
     "prepublishOnly": "yarn build"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "dependencies": {
     "ramda": "^0.27.0",
-    "vue": "^3.0.0-beta.21"
+    "vue": "^3.0.0-rc.2"
   },
   "devDependencies": {
     "@ant-design-vue/babel-plugin-jsx": "^1.0.0-beta.3",

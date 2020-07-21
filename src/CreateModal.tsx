@@ -5,10 +5,10 @@ interface ModalObj {
   component: any
   zIndex?: number
   isOpened?: boolean
-  _key?: string
+  key?: string
 }
 interface ModalMap {
-  [ index: string ]: Omit<ModalObj, '_key'>
+  [ index: string ]: Omit<ModalObj, 'key'>
 }
 
 type Listener = (...args: any[]) => any
@@ -78,20 +78,20 @@ export const createVfModal = (config: CreateConfig) => {
     visible.value = true
     isClosed.value = false
     if (multipleModal) {
-      renderList.push({ isOpened: true, zIndex, _key: key })
+      renderList.push({ isOpened: true, zIndex, key })
     } else {
-      const target = renderList.find(el => el._key === key)
+      const target = renderList.find(el => el.key === key)
       if (target) {
         target.isOpened = true
       } else {
-        renderList.push({ isOpened: true, zIndex, _key: key })
+        renderList.push({ isOpened: true, zIndex, key })
       }
     }
   }
 
   const close = (key?: keyof typeof modals, closeModal = true) => {
     if (key) {
-      const target = renderList.find(el => el._key === key && el.isOpened)
+      const target = renderList.find(el => el.key === key && el.isOpened)
       if (target) {
         target.isOpened = false
       }
@@ -123,18 +123,18 @@ export const createVfModal = (config: CreateConfig) => {
 
       const rlist = computed(() => {
         return renderList.filter(el => el.isOpened).map(el => {
-          const { _key } = el
-          const component = modals[ _key ].component
+          const { key } = el
+          const component = modals[ key ].component
           let { zIndex } = el
           if (zIndex !== undefined) {
             zIndex = 1
           }
 
           const handlerClose = (closeModal = true) => {
-            close(_key, closeModal)
+            close(key, closeModal)
           }
 
-          return <component onClose={handlerClose} name={_key} style={{ zIndex }}></component>
+          return <component onClose={handlerClose} name={key} style={{ zIndex }}></component>
         })
 
       })
