@@ -38,7 +38,7 @@ export declare const createVfModal: (config: CreateConfig) => {
     Controller: {
         open: (key: string, zIndex?: number) => void;
         close: (key?: string | number | undefined, closeModal?: boolean) => void;
-        closed: () => Promise<void>;
+        isClosed: () => Promise<void>;
     };
 };
 export {};
