@@ -13,11 +13,6 @@
   user-select: none
 }
 
-.dialog-wrapper {
-  position: relative
-  z-index: 11
-}
-
 .mask-wrapper {
   position: fixed
   top: 0
@@ -27,20 +22,17 @@
   background: rgba(0, 0, 0, 0.6)
 }
 
-.fade {
-  transition: opacity 50ms ease
-}
+enterTime = 0.3s
+leaveTime = 0.3s
+transitionTime = enterTime
 
-.group-move {
-  transition: transform 50ms ease
+.fade {
+  transition: opacity transitionTime ease
 }
 
 .fade-appear, .fade-enter, .fade-leave-active {
   opacity: 0
 }
-
-enterTime = 0.3s
-leaveTime = 0.3s
 
 .fade-anim-leave-active, .fade-anim-enter-active {
   animation: fade-enter leaveTime

@@ -25,8 +25,8 @@ interface CreateConfig {
     type: TransitionProps[ 'type' ]
   }
   on?: {
-    modalOpen: Listener
-    [ x: string ]: Listener
+    modalOpen?: Listener
+    modalClose?: Listener
   }
   multipleModal?: boolean
 }
@@ -34,15 +34,14 @@ interface CreateConfig {
 const defaultCreateConfig: CreateConfig = {
   modals: {},
   transition: {
-    name: 'fade',
+    name: 'vf-modal-fade',
     type: 'animation'
   },
   maskWrapper: {
     clickHandler: () => { },
-    classname: 'mask-wrapper'
+    classname: 'vf-modal-mask-wrapper'
   },
   on: {
-    modalOpen: () => { }
   }
 }
 
@@ -62,12 +61,26 @@ export const createVfModal = (config: CreateConfig) => {
    */
   const visible = ref(false)
 
-  const isClosed = ref(false)
-  watchEffect(() => {
-    if (isClosed.value) {
-      visible.value = false
-    }
-  })
+  /**
+   * handler visible on Transition component enter
+   */
+  const handlerOnAfterEnter = () => {
+    visible.value = true
+    if (on!.modalOpen) on!.modalOpen()
+  }
+
+  /**
+    * handler visible on Transition component leave
+  */
+  const handlerOnAfterLeave = () => {
+    visible.value = false
+    if (on!.modalClose) on!.modalClose()
+  }
+
+  /**
+   * change this value to control modal opened/closed
+   */
+  const isModalOpened = ref(false)
 
 
   /**
@@ -75,8 +88,8 @@ export const createVfModal = (config: CreateConfig) => {
    */
   const open = (key: keyof typeof modals & string, zIndex = 1) => {
 
-    visible.value = true
-    isClosed.value = false
+    isModalOpened.value = true
+
     if (multipleModal) {
       renderList.push({ isOpened: true, zIndex, key })
     } else {
@@ -97,12 +110,14 @@ export const createVfModal = (config: CreateConfig) => {
       }
     }
     if (!key || closeModal) {
-      isClosed.value = true
+      // clear renderlist
+      while (renderList.length > 0) renderList.pop()
+      isModalOpened.value = false
     }
   }
-  const closed = new Promise<void>((resolve, reject) => {
-    watchEffect(() => {
-      if (isClosed.value) {
+  const isClosed = () => new Promise<void>((resolve, reject) => {
+    watch(visible, () => {
+      if (visible.value) {
         resolve()
       }
     })
@@ -110,6 +125,7 @@ export const createVfModal = (config: CreateConfig) => {
 
 
   const VfModal = defineComponent({
+    name: 'vf-modal-instance',
     setup () {
 
       // use custom provide function
@@ -142,13 +158,14 @@ export const createVfModal = (config: CreateConfig) => {
       // const zIndex = 0
 
       return () => (
-        <Transition name={transition!.name} type={transition!.type} onAfterEnter={on!.modalOpen}>
+        <Transition name={transition!.name} type={transition!.type} onAfterEnter={handlerOnAfterEnter} onAfterLeave={handlerOnAfterLeave}>
           <div
-            class="fixed-wrapper"
-            v-show={visible.value}
+            class="vf-modal-fixed-wrapper"
+            v-show={isModalOpened.value}
           >
             <div
               style={{ zIndex: 1 }}
+              class="vf-modal-container-wrapper"
             >
               {rlist.value}
             </div>
@@ -163,7 +180,7 @@ export const createVfModal = (config: CreateConfig) => {
   const Controller = {
     open,
     close,
-    closed
+    isClosed
   }
 
   return {

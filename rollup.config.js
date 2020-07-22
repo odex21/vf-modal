@@ -51,7 +51,15 @@ const plugins = [
     extensions,
   } ),
   commonjs(),
-  stylus(),
+  stylus( {
+    compiler: {
+      use: [
+        ( stylus ) => {
+          stylus.set( 'prefix', 'vf-modal-' )
+        }
+      ]
+    }
+  } ),
   css(),
 ]
 
