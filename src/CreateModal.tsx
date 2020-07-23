@@ -1,4 +1,4 @@
-import { provide, UnwrapRef, Ref, ref, Transition, ComponentPublicInstance, defineComponent, ComponentCustomOptions, ComponentOptions, TransitionProps, reactive, watch, watchEffect, toRaw, shallowReactive, shallowRef, render, computed, InjectionKey, markRaw } from 'vue'
+import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey } from 'vue'
 import { merge, mergeDeepLeft, mergeDeepRight } from 'ramda'
 
 interface ModalObj {
@@ -13,8 +13,8 @@ interface ModalMap {
 
 type Listener = (...args: any[]) => any
 
-interface CreateConfig {
-  modals: ModalMap
+interface CreateConfig<T extends ModalMap> {
+  modals: T
   provide?: () => void
   maskWrapper?: {
     clickHandler?: Listener
@@ -31,8 +31,7 @@ interface CreateConfig {
   multipleModal?: boolean
 }
 
-const defaultCreateConfig: CreateConfig = {
-  modals: {},
+const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
   transition: {
     name: 'vf-modal-fade',
     type: 'animation'
@@ -46,15 +45,18 @@ const defaultCreateConfig: CreateConfig = {
 }
 
 interface VfModalInstanceState {
-  renderList: UnwrapRef<Required<ModalObj>[]>
+  renderList: RenderList
   close: (key?: string | number | undefined) => void
 }
 
+type RenderList = UnwrapRef<Required<Omit<ModalObj, 'component'>>[]>
+
 export const VfMODAL_STORE_KEY: InjectionKey<VfModalInstanceState> = Symbol('VF_MODAL_STORE_KEY')
 
-export const createVfModal = (config: CreateConfig) => {
-  const { modals, provide: customProvide, transition, maskWrapper, on, multipleModal } = mergeDeepRight(defaultCreateConfig, config)
-  const renderList: UnwrapRef<Required<Omit<ModalObj, 'component'>>[]> = reactive([])
+export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
+  const { modals } = config
+  const { provide: customProvide, transition, maskWrapper, on, multipleModal } = mergeDeepRight(defaultCreateConfig, config)
+  const renderList: RenderList = reactive([])
 
   /**
    * visible of modal instance 
@@ -86,7 +88,7 @@ export const createVfModal = (config: CreateConfig) => {
   /**
    * open a modal by key
    */
-  const open = (key: keyof typeof modals & string, zIndex = 1) => {
+  const open = (key: (keyof T) & string, zIndex = 1) => {
 
     isModalOpened.value = true
 
@@ -115,6 +117,7 @@ export const createVfModal = (config: CreateConfig) => {
       isModalOpened.value = false
     }
   }
+
   const isClosed = () => new Promise<void>((resolve, reject) => {
     watch(visible, () => {
       if (visible.value) {
@@ -154,8 +157,6 @@ export const createVfModal = (config: CreateConfig) => {
         })
 
       })
-
-      // const zIndex = 0
 
       return () => (
         <Transition name={transition!.name} type={transition!.type} onAfterEnter={handlerOnAfterEnter} onAfterLeave={handlerOnAfterLeave}>
