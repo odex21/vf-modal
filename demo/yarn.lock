@@ -2072,6 +2072,11 @@ vite@^1.0.0-beta.3:
     vue "^3.0.0-beta.14"
     ws "^7.2.3"
 
+vue-router@^4.0.0-beta.4:
+  version "4.0.0-beta.4"
+  resolved "https://registry.npm.taobao.org/vue-router/download/vue-router-4.0.0-beta.4.tgz?cache=0&sync_timestamp=1595736279100&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-router%2Fdownload%2Fvue-router-4.0.0-beta.4.tgz#0945886e8e35bed368ab57e50a6b004cff1459e0"
+  integrity sha1-CUWIbo41vtNoq1flCmsATP8UWeA=
+
 vue@^3.0.0-beta.14:
   version "3.0.0-beta.21"
   resolved "https://registry.npmjs.org/vue/-/vue-3.0.0-beta.21.tgz#71b8ba89cf5e2321371344492caa854e8087848c"

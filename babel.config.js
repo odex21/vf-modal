@@ -2,7 +2,10 @@ module.exports = {
   "presets": [
     "@babel/preset-typescript"
   ],
-  "plugins": [ "@ant-design-vue/babel-plugin-jsx" ],
+  "plugins": [
+    "@ant-design-vue/babel-plugin-jsx",
+    "@babel/plugin-proposal-optional-chaining"
+  ],
   "env": {
     "test": {
       "presets": [

@@ -8,17 +8,15 @@
   <p>
     <button @click="openModal('test')">open modal</button>
   </p>
-  <modal-test />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, nextTick } from 'vue'
-import { ModalTest, Controller } from './modalA'
+import { Controller } from './modalA'
 
 export default defineComponent({
   name: 'HelloWorld',
   components: {
-    ModalTest
   },
   props: {
     msg: {

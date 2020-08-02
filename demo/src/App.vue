@@ -1,15 +1,20 @@
 <template>
+  <div>
+    <router-link to="/">home</router-link>
+    <router-link to="/other">other</router-link>
+  </div>
   <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3.0 + Vite" />
+  <router-view />
+  <modal-test />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { ModalTest } from './components/modalA'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ModalTest
   }
 }
 </script>

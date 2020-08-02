@@ -1,4 +1,4 @@
-import { UnwrapRef, ComponentPublicInstance, TransitionProps, InjectionKey } from 'vue';
+import { UnwrapRef, TransitionProps, InjectionKey } from 'vue';
 interface ModalObj {
     component: any;
     zIndex?: number;
@@ -9,8 +9,8 @@ interface ModalMap {
     [index: string]: Omit<ModalObj, 'key'>;
 }
 declare type Listener = (...args: any[]) => any;
-interface CreateConfig {
-    modals: ModalMap;
+interface CreateConfig<T extends ModalMap> {
+    modals: T;
     provide?: () => void;
     maskWrapper?: {
         clickHandler?: Listener;
@@ -25,20 +25,22 @@ interface CreateConfig {
         modalClose?: Listener;
     };
     multipleModal?: boolean;
+    closeWhenRouteChanges?: boolean;
 }
 interface VfModalInstanceState {
-    renderList: UnwrapRef<Required<ModalObj>[]>;
+    renderList: RenderList;
     close: (key?: string | number | undefined) => void;
 }
+declare type RenderList = UnwrapRef<Required<Omit<ModalObj, 'component'>>[]>;
 export declare const VfMODAL_STORE_KEY: InjectionKey<VfModalInstanceState>;
-export declare const createVfModal: (config: CreateConfig) => {
-    VfModal: (new () => ComponentPublicInstance<{}, () => JSX.Element, {}, {}, {}, Record<string, any>, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, import("vue").ComponentOptionsBase<{}, () => JSX.Element, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string>>) & import("vue").ComponentOptionsBase<{}, () => JSX.Element, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string> & {
+export declare const createVfModal: <T extends ModalMap>(config: CreateConfig<T>) => {
+    VfModal: (new () => import("vue").ComponentPublicInstance<{}, () => JSX.Element, {}, {}, {}, Record<string, any>, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, import("vue").ComponentOptionsBase<{}, () => JSX.Element, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string>>) & import("vue").ComponentOptionsBase<{}, () => JSX.Element, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string> & {
         props?: undefined;
-    } & ThisType<ComponentPublicInstance<{}, () => JSX.Element, {}, {}, {}, Record<string, any>, Readonly<{}>, import("vue").ComponentOptionsBase<{}, () => JSX.Element, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string>>>;
+    } & ThisType<import("vue").ComponentPublicInstance<{}, () => JSX.Element, {}, {}, {}, Record<string, any>, Readonly<{}>, import("vue").ComponentOptionsBase<{}, () => JSX.Element, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string>>>;
     Controller: {
-        open: (key: string, zIndex?: number) => void;
-        close: (key?: string | number | undefined, closeModal?: boolean) => void;
-        isClosed: () => Promise<void>;
+        open: (key: keyof T & string, zIndex?: number) => () => Promise<void>;
+        close: (key?: (keyof T & string) | undefined, closeModal?: boolean) => void;
+        isClosed: (key?: (keyof T & string) | undefined) => Promise<void>;
     };
 };
 export {};

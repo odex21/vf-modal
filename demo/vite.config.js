@@ -1,10 +1,8 @@
-const path = require( 'path' )
-const p = path.resolve( __dirname, '../dist' )
-console.log( p )
+const path = require('path')
+
 module.exports = {
-  // root: path.resolve('./visual'),
   alias: {
-    '/vf-modal/': p,
-    // '/@/': __dirname,
+    '/vf-modal/': path.resolve(__dirname, '../dist'),
+    '/@/': path.resolve(__dirname, './src'),
   },
 }

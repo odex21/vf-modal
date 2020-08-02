@@ -25,46 +25,47 @@ const output = [
 
 const external = [
   'vue',
-  'ramda'
+  'vue-router',
+  'ramda',
 ]
 
 
-console.log( process.env.NODE_ENV )
+console.log(process.env.NODE_ENV)
 
 const MODE = process.env.MODE || 'dev'
 
 const plugins = [
-  clear( {
+  clear({
     targets: [ 'dist' ],
     watch: true,
-  } ),
-  resolve( {
+  }),
+  resolve({
     browser: true,
     preferBuiltins: false,
     extensions,
-  } ),
-  typescript( {
+  }),
+  typescript({
     tsconfig: 'tsconfig.json',
-  } ),
-  babel( {
+  }),
+  babel({
     exclude: 'node_modules/**', // only transpile our source code
     extensions,
-  } ),
+  }),
   commonjs(),
-  stylus( {
+  stylus({
     compiler: {
       use: [
-        ( stylus ) => {
-          stylus.set( 'prefix', 'vf-modal-' )
+        (stylus) => {
+          stylus.set('prefix', 'vf-modal-')
         }
       ]
     }
-  } ),
+  }),
   css(),
 ]
 
-if ( MODE === 'production' ) {
-  plugins.push( terser() )
+if (MODE === 'production') {
+  plugins.push(terser())
 }
 
 export default {
