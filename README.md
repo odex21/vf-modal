@@ -1,6 +1,11 @@
 # vf-modal
 ## A simple modal framework for vue3.
 
+## Todo 
+1. add tests
+2. build a docs
+3. more demos
+
 ### Install
 
 ```bash
