@@ -54,6 +54,7 @@ export interface CreateConfig extends BaseConfig {
   container?: VueConstructor | 'div'
   transitionName?: string
   closeButtonClass?: string
+  maskWrapperClass?: string
   conatainerProps?: {
     [ key: string ]: any
   }
@@ -70,6 +71,7 @@ export interface baseResolve {
 const defaultBaseConfig: CreateConfig = {
   container: 'div',
   containerClass: 'dialog-wrapper',
+  maskWrapperClass: 'mask-wrapper',
   transitionName: 'fade',
   containerStyle: {
     zIndex: 999
@@ -201,6 +203,7 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
             containerStyle,
             closeButtonClass,
             maskClosable,
+            maskWrapperClass
           } = merge(defaultBaseConfig, createConfig || {})
 
           const defaultNode = []
@@ -234,7 +237,7 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
                   {customNode}
                 </container>
 
-                <div style={{ zIndex }} onClick={maskClickHandler} class="mask-wrapper"></div>
+                <div style={{ zIndex }} onClick={maskClickHandler} class={maskWrapperClass}></div>
               </div>
             </transition >
           )
