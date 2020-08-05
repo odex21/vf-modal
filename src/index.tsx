@@ -260,7 +260,7 @@ export const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTyp
 /**
  * get a modal that will be closed when component unmounted
  */
-export const craeteUseModal = <T extends Function> (Modal: T) => () => {
+export const createUseModal = <T extends Function> (Modal: T) => () => {
   let modal: baseResolve
 
   const openModal = async (data: T extends (config: infer U) => any ? U : never) => {

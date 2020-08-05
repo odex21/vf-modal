@@ -43,6 +43,7 @@ export interface CreateConfig extends BaseConfig {
     container?: VueConstructor | 'div';
     transitionName?: string;
     closeButtonClass?: string;
+    maskWrapperClass?: string;
     conatainerProps?: {
         [key: string]: any;
     };
@@ -65,7 +66,7 @@ declare const Component: import("vue/types/vue").ExtendedVue<Vue, {
     close(type: CloseType, ...args: any[]): void;
     handleAfterLeave(): void;
 }, unknown, Record<"$el" | "$options" | "$parent" | "$root" | "$children" | "$refs" | "$slots" | "$scopedSlots" | "$isServer" | "$data" | "$props" | "$ssrContext" | "$vnode" | "$attrs" | "$listeners" | "$mount" | "$forceUpdate" | "$destroy" | "$set" | "$delete" | "$watch" | "$on" | "$once" | "$off" | "$emit" | "$nextTick" | "$createElement", any>>;
-declare const createVfModal: <T_1 extends ModalTypesGroup<import("vue/types/vue").CombinedVueInstance<{
+export declare const createVfModal: <T_1 extends ModalTypesGroup<import("vue/types/vue").CombinedVueInstance<{
     visible: boolean;
     id: string;
     closed: boolean;
@@ -88,4 +89,10 @@ declare const createVfModal: <T_1 extends ModalTypesGroup<import("vue/types/vue"
     close(type: CloseType, ...args: any[]): void;
     handleAfterLeave(): void;
 } & Record<"$el" | "$options" | "$parent" | "$root" | "$children" | "$refs" | "$slots" | "$scopedSlots" | "$isServer" | "$data" | "$props" | "$ssrContext" | "$vnode" | "$attrs" | "$listeners" | "$mount" | "$forceUpdate" | "$destroy" | "$set" | "$delete" | "$watch" | "$on" | "$once" | "$off" | "$emit" | "$nextTick" | "$createElement", any> & Vue, object, object, object, Record<never, any>>>) => Promise<baseResolve>;
-export { createVfModal };
+/**
+ * get a modal that will be closed when component unmounted
+ */
+export declare const createUseModal: <T extends Function>(Modal: T) => () => {
+    openModal: (data: T extends (config: infer U) => any ? U : never) => Promise<void>;
+};
+export {};
