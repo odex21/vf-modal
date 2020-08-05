@@ -5,7 +5,10 @@ import { prevent, generateClass, findKey, hyphenate } from './utils'
 import { filter, merge } from 'ramda'
 import { VueConstructor } from 'vue/types/vue'
 import { ComponentOptions } from 'vue/types/options'
+import compositionApi, { onMounted } from '@vue/composition-api'
 import * as CSS from 'csstype'
+
+Vue.use(compositionApi)
 
 export type Listener<T> = (instance: T, type: CloseType, ...args: any[]) => any
 export interface ListenerGroup<T> {
@@ -122,7 +125,7 @@ const Component = Vue.extend({
 
 const zIndex = 0
 
-const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup: T, createConfig?: CreateConfig) =>
+export const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup: T, createConfig?: CreateConfig) =>
   (config: ModalRunConfig<keyof T, ModalIntance>): Promise<baseResolve> => {
     return new Promise((resolve, reject) => {
 
@@ -254,4 +257,24 @@ const createVfModal = <T extends ModalTypesGroup<ModalIntance>> (modalTypesGroup
 
 
 
-export { createVfModal }
+/**
+ * get a modal that will be closed when component unmounted
+ */
+export const craeteUseModal = <T extends Function> (Modal: T) => () => {
+  let modal: baseResolve
+
+  const openModal = async (data: T extends (config: infer U) => any ? U : never) => {
+    modal = await Modal({ ...(data as Object), awaitClose: false })
+  }
+
+  onMounted(() => {
+    if (modal && modal.instance) {
+      modal.instance.close('close')
+    }
+  })
+
+  return {
+    openModal
+  }
+}
+

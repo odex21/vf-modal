@@ -6,7 +6,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import { DEFAULT_EXTENSIONS } from '@babel/core'
 import stylus from 'rollup-plugin-stylus-compiler'
 import css from 'rollup-plugin-css-porter'
-const extensions = [DEFAULT_EXTENSIONS]
+const extensions = [...DEFAULT_EXTENSIONS]
 import commonjs from 'rollup-plugin-commonjs'
 
 const TARGET = process.env.TARGET
@@ -34,6 +34,8 @@ const output = browerEsm ?
 
 const external = [
   'vue',
+  '@vue/composition-api',
+  'ramda'
 ]
 
 if (TARGET === 'es') {
@@ -52,9 +54,7 @@ const plugins = [
     'process.env.NODE_ENV': JSON.stringify('production')
   }),
   resolve({
-    jsnext: true,
     browser: true,
-    main: true,
     preferBuiltins: false,
     extensions,
   }),

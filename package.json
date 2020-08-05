@@ -1,6 +1,6 @@
 {
   "name": "vf-modal",
-  "version": "0.0.5",
+  "version": "0.0.7-beta.1",
   "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
@@ -15,18 +15,18 @@
     "test": "jest"
   },
   "dependencies": {
+    "@vue/composition-api": "^1.0.0-beta.6",
     "ramda": "^0.27.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {
-    "rollup-plugin-commonjs": "^10.1.0",
-    "@types/ramda": "^0.27.3",
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-typescript": "^7.9.0",
     "@rollup/plugin-commonjs": "^11.1.0",
     "@rollup/plugin-node-resolve": "^7.1.3",
     "@types/jest": "^25.2.1",
+    "@types/ramda": "^0.27.3",
     "@vue/babel-preset-jsx": "^1.1.2",
     "@vue/test-utils": "^1.0.0",
     "babel-core": "7.0.0-bridge.0",
@@ -41,6 +41,7 @@
     "rollup": "^2.6.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-clear": "^2.0.7",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-css-only": "^2.0.0",
     "rollup-plugin-css-porter": "^1.0.2",
     "rollup-plugin-replace": "^2.2.0",
