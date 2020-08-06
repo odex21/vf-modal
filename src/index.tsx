@@ -5,7 +5,7 @@ import { prevent, generateClass, findKey, hyphenate } from './utils'
 import { filter, merge } from 'ramda'
 import { VueConstructor } from 'vue/types/vue'
 import { ComponentOptions } from 'vue/types/options'
-import compositionApi, { onMounted } from '@vue/composition-api'
+import compositionApi, { onUnmounted } from '@vue/composition-api'
 import * as CSS from 'csstype'
 
 Vue.use(compositionApi)
@@ -267,7 +267,7 @@ export const createUseModal = <T extends Function> (Modal: T) => () => {
     modal = await Modal({ ...(data as Object), awaitClose: false })
   }
 
-  onMounted(() => {
+  onUnmounted(() => {
     if (modal && modal.instance) {
       modal.instance.close('close')
     }

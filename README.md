@@ -80,6 +80,36 @@ modal({
 })
 ```
 
+### Use with @vue/composition-api
+In this case modal will be automatically closed when the component is unmounted(e.g. when route is changed.).
+
+```js
+// modal.js
+import { createUseModal, createVfModal } from 'vf-modal'
+
+const modal = createVfModal({
+  error: [ { component: ErrorComponent} ]
+})
+
+const useMdol = createUseModal(modal)
+
+// App.vue
+import { defineComponent } from '@vue/composition-api'
+export default defineComponent({
+  setup(){
+    const { openModal } = useModal()
+
+    const handleClick = () => {
+      openModal({type: 'error'})
+    }
+
+    return {
+      handleClick
+    }
+  }
+})
+```
+
 ### Docs
 
 Soon.
