@@ -1436,12 +1436,12 @@
     "@vue/babel-plugin-transform-vue-jsx" "^1.1.2"
     camelcase "^5.0.0"
 
-"@vue/composition-api@^1.0.0-beta.6":
-  version "1.0.0-beta.6"
-  resolved "https://registry.npmjs.org/@vue/composition-api/-/composition-api-1.0.0-beta.6.tgz#d526b31f09acdffd0e9424c53cd9f8ffaef10408"
-  integrity sha512-Gz7w4bALSPkM37AbQDZubXjbRs850GwKeZr5bUFXrhW2MuyvS6r9euKWMAu/jwJmNaVc4ZLYaGLjNDQrGcHGGw==
+"@vue/composition-api@^1.0.0-beta.9":
+  version "1.0.0-beta.9"
+  resolved "https://registry.npmjs.org/@vue/composition-api/-/composition-api-1.0.0-beta.9.tgz#504b56c98c4cff4080cc0b497ad3bffdf83334df"
+  integrity sha512-DZbeYiVnKubVAoC2geA3ljtz9lesP79Rv1LgMasRPHWWtkrZKAUz2Tmj9AjHIzWUBKlqXtEFzVTA9Aiib3J1nQ==
   dependencies:
-    tslib "^2.0.0"
+    tslib "^2.0.1"
 
 "@vue/test-utils@^1.0.0":
   version "1.0.2"
@@ -5994,10 +5994,10 @@ tslib@1.11.1:
   resolved "https://registry.npm.taobao.org/tslib/download/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
   integrity sha1-6xXRKIJ/vuKEFUnhcfRe0zisfjU=
 
-tslib@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.0.0.tgz#18d13fc2dce04051e20f074cc8387fd8089ce4f3"
-  integrity sha512-lTqkx847PI7xEDYJntxZH89L2/aXInsyF2luSafe/+0fHOMjlBNXdH6th7f70qxLDhul7KZK0zC8V5ZIyHl0/g==
+tslib@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
+  integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
 
 tunnel-agent@^0.6.0:
   version "0.6.0"
