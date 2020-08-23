@@ -1,15 +1,17 @@
-import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey } from 'vue'
-import { mergeDeepRight } from 'ramda'
+import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey, shallowReactive } from 'vue'
 import { useRoute } from "vue-router"
+import { mergeDeepRight } from 'ramda'
+import mitt, { Emitter } from 'mitt'
 
 interface ModalObj {
   component: any
   zIndex?: number
   isOpened?: boolean
   key?: string
+  emitter: Emitter
 }
 interface ModalMap {
-  [ index: string ]: Omit<ModalObj, 'key'>
+  [ index: string ]: Omit<ModalObj, 'key' | 'emitter'>
 }
 
 type Listener = (...args: any[]) => any
@@ -53,6 +55,7 @@ interface VfModalInstanceState {
 }
 
 type RenderList = UnwrapRef<Required<Omit<ModalObj, 'component'>>[]>
+type RenderItem = RenderList extends (infer T)[] ? T : never
 
 export const VfMODAL_STORE_KEY: InjectionKey<VfModalInstanceState> = Symbol('VF_MODAL_STORE_KEY')
 
@@ -98,18 +101,31 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
     isModalOpened.value = true
 
+    const emitter = mitt()
+    const item = shallowReactive({ isOpened: true, zIndex, key, emitter })
+
     if (multipleModal) {
-      renderList.push({ isOpened: true, zIndex, key })
+      renderList.push(item)
     } else {
       const target = renderList.find(el => el.key === key)
       if (target) {
         target.isOpened = true
       } else {
-        renderList.push({ isOpened: true, zIndex, key })
+        renderList.push(item)
       }
     }
 
-    return () => isClosed(key)
+    return {
+      emitter,
+      isClosed: () => new Promise((resolve) => {
+        const unWatch = watch(() => item.isOpened, (value) => {
+          if (!value) {
+            unWatch()
+            resolve()
+          }
+        })
+      })
+    }
   }
 
   /**
@@ -135,7 +151,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
    * return a promise that resolve when modal close
    */
   const isClosed = (key?: ModalKey) => new Promise<void>((resolve, reject) => {
-    const stop = watch(visible, () => {
+    const unWatch = watch(visible, () => {
       if (!visible.value) {
         if (key) {
           const target = renderList.find(el => el.key === key)
@@ -144,7 +160,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             return
           }
         }
-        stop()
+        unWatch()
         resolve()
       }
     })
@@ -179,7 +195,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
       const rlist = computed(() => {
         return renderList.filter(el => el.isOpened).map(el => {
-          const { key } = el
+          const { key, emitter } = el
           const component = modals[ key ].component
           let { zIndex } = el
           if (zIndex !== undefined) {
@@ -190,7 +206,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             close(key, closeModal)
           }
 
-          return <component onClose={handlerClose} name={key} style={{ zIndex }}></component>
+          return <component emitter={emitter} onClose={handlerClose} name={key} style={{ zIndex }}></component>
         })
 
       })

@@ -11,15 +11,21 @@
   </div>
 </template>
 <script lang="ts">
-import Vue, { defineComponent, inject } from 'vue'
+import Vue, { defineComponent, inject, PropType, onMounted } from 'vue'
 import { useStore } from '../modalShare'
 import { createVfModal, VfMODAL_STORE_KEY } from '/vf-modal/index'
 // import { VfMODAL_STORE_KEY } from '/vf-modal/'
+import { Emitter } from 'mitt'
+
 export default defineComponent({
   props: {
     msg: {
       default: 'netError',
       type: String
+    },
+    emitter: {
+      type: Object as PropType<Emitter>,
+      required: true
     }
   },
   setup (props, { emit }) {
@@ -32,6 +38,10 @@ export default defineComponent({
       emit('close')
       console.log('close ?')
     }
+
+    onMounted(() => {
+      props.emitter.emit('hhh')
+    })
 
     return {
       state,

@@ -22,11 +22,20 @@ export default defineComponent({
     msg: {
       default: '',
       type: String
-    }
+    },
+
   },
   setup () {
     const count = ref(0)
-    const openModal = () => Controller.open('test')
+    const openModal = async () => {
+
+      const { emitter, isClosed } = Controller.open('test')
+      emitter.on('hhh', () => {
+        console.log('on hhh')
+      })
+      await isClosed()
+      console.log('close  sss')
+    }
 
     onMounted(() => {
       // openModal()

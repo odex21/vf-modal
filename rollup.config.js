@@ -6,7 +6,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import { DEFAULT_EXTENSIONS } from '@babel/core'
 import stylus from 'rollup-plugin-stylus-compiler'
 import css from 'rollup-plugin-css-porter'
-const extensions = [ ...DEFAULT_EXTENSIONS, '.ts', '.tsx' ]
+const extensions = [...DEFAULT_EXTENSIONS, '.ts', '.tsx']
 import commonjs from 'rollup-plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 
@@ -27,6 +27,7 @@ const external = [
   'vue',
   'vue-router',
   'ramda',
+  'mitt'
 ]
 
 
@@ -36,7 +37,7 @@ const MODE = process.env.MODE || 'dev'
 
 const plugins = [
   clear({
-    targets: [ 'dist' ],
+    targets: ['dist'],
     watch: true,
   }),
   resolve({
