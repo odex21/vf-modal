@@ -12,8 +12,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, nextTick } from 'vue'
+import { defineComponent, ref, onMounted, nextTick, PropType } from 'vue'
 import { ModalTest, Controller } from './modalA'
+import { Emitter } from 'mitt'
 
 export default defineComponent({
   name: 'HelloWorld',
@@ -24,11 +25,20 @@ export default defineComponent({
     msg: {
       default: '',
       type: String
-    }
+    },
+
   },
   setup () {
     const count = ref(0)
-    const openModal = () => Controller.open('test')
+    const openModal = async () => {
+
+      const { emitter, isClosed } = Controller.open('test')
+      emitter.on('hhh', () => {
+        console.log('on hhh')
+      })
+      await isClosed()
+      console.log('close  sss')
+    }
 
     onMounted(() => {
       // openModal()
