@@ -1,7 +1,6 @@
 import typescript from 'rollup-plugin-typescript2'
 import clear from 'rollup-plugin-clear'
 import babel from 'rollup-plugin-babel'
-// import replace from 'rollup-plugin-replace'
 import resolve from '@rollup/plugin-node-resolve'
 import { DEFAULT_EXTENSIONS } from '@babel/core'
 import stylus from 'rollup-plugin-stylus-compiler'
