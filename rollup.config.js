@@ -7,7 +7,7 @@ import stylus from 'rollup-plugin-stylus-compiler'
 import css from 'rollup-plugin-css-porter'
 const extensions = [...DEFAULT_EXTENSIONS, '.ts', '.tsx']
 import commonjs from 'rollup-plugin-commonjs'
-import { terser } from 'rollup-plugin-terser'
+// import { terser } from 'rollup-plugin-terser'
 
 // const TARGET = process.env.TARGET
 // if (!TARGET) {
@@ -64,9 +64,9 @@ const plugins = [
   css(),
 ]
 
-if (MODE === 'production') {
-  plugins.push(terser())
-}
+// if (MODE === 'production') {
+//   plugins.push(terser())
+// }
 
 export default {
   input: 'src/index.tsx',
