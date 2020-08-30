@@ -31,7 +31,8 @@ interface CreateConfig<T extends ModalMap> {
 }
 interface VfModalInstanceState {
     renderList: RenderList;
-    close: (key?: string | number | undefined) => void;
+    close: (key?: string) => void;
+    emitter: Emitter;
 }
 declare type RenderList = UnwrapRef<Required<Omit<ModalObj, 'component'>>[]>;
 export declare const VfMODAL_STORE_KEY: InjectionKey<VfModalInstanceState>;

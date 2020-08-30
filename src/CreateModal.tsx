@@ -51,7 +51,8 @@ const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
 
 interface VfModalInstanceState {
   renderList: RenderList
-  close: (key?: string | number | undefined) => void
+  close: (key?: string) => void
+  emitter: Emitter
 }
 
 type RenderList = UnwrapRef<Required<Omit<ModalObj, 'component'>>[]>
@@ -93,6 +94,8 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
   const isModalOpened = ref(false)
 
 
+  const emitter = mitt()
+
   /**
    * open a modal with key
    * @return {Promise}  a promise that resolve when modal close
@@ -101,7 +104,6 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
     isModalOpened.value = true
 
-    const emitter = mitt()
     const item = shallowReactive({ isOpened: true, zIndex, key, emitter })
 
     if (multipleModal) {
@@ -190,7 +192,8 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
       // provie base state
       provide(VfMODAL_STORE_KEY, {
         renderList,
-        close
+        close,
+        emitter
       })
 
       const rlist = computed(() => {
@@ -206,7 +209,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             close(key, closeModal)
           }
 
-          return <component emitter={emitter} onClose={handlerClose} name={key} style={{ zIndex }}></component>
+          return <component onClose={handlerClose} name={key} style={{ zIndex }}></component>
         })
 
       })
