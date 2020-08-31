@@ -8,10 +8,10 @@ interface ModalObj {
   zIndex?: number
   isOpened?: boolean
   key?: string
-  emitter: Emitter
+  props?: Record<string, any>
 }
 interface ModalMap {
-  [ index: string ]: Omit<ModalObj, 'key' | 'emitter'>
+  [ index: string ]: Omit<ModalObj, 'key' | 'props'>
 }
 
 type Listener = (...args: any[]) => any
@@ -100,11 +100,11 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
    * open a modal with key
    * @return {Promise}  a promise that resolve when modal close
    */
-  const open = (key: ModalKey, zIndex = 1) => {
+  const open = (key: ModalKey, props: Record<string, any> = {}, zIndex = 1) => {
 
     isModalOpened.value = true
 
-    const item = shallowReactive({ isOpened: true, zIndex, key, emitter })
+    const item = { isOpened: true, zIndex, key, props }
 
     if (multipleModal) {
       renderList.push(item)
@@ -198,18 +198,18 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
       const rlist = computed(() => {
         return renderList.filter(el => el.isOpened).map(el => {
-          const { key, emitter } = el
+          const { key, props } = el
           const component = modals[ key ].component
-          let { zIndex } = el
-          if (zIndex !== undefined) {
-            zIndex = 1
+
+          if (el.zIndex !== undefined) {
+            el.zIndex = 1
           }
 
           const handlerClose = (closeModal = true) => {
             close(key, closeModal)
           }
 
-          return <component onClose={handlerClose} name={key} style={{ zIndex }}></component>
+          return <component {...props} onClose={handlerClose} name={key} style={{ zIndex: el.zIndex }}></component>
         })
 
       })

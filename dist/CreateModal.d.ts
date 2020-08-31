@@ -5,10 +5,10 @@ interface ModalObj {
     zIndex?: number;
     isOpened?: boolean;
     key?: string;
-    emitter: Emitter;
+    props?: Record<string, any>;
 }
 interface ModalMap {
-    [index: string]: Omit<ModalObj, 'key' | 'emitter'>;
+    [index: string]: Omit<ModalObj, 'key' | 'props'>;
 }
 declare type Listener = (...args: any[]) => any;
 interface CreateConfig<T extends ModalMap> {
@@ -46,7 +46,7 @@ export declare const createVfModal: <T extends ModalMap>(config: CreateConfig<T>
         props?: undefined;
     } & ThisType<import("vue").ComponentPublicInstance<{}, () => JSX.Element, {}, {}, {}, Record<string, any>, Readonly<{}>, import("vue").ComponentOptionsBase<{}, () => JSX.Element, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string>>>;
     Controller: {
-        open: (key: keyof T & string, zIndex?: number) => {
+        open: (key: keyof T & string, props?: Record<string, any>, zIndex?: number) => {
             emitter: Emitter;
             isClosed: () => Promise<unknown>;
         };

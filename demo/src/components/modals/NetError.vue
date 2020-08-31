@@ -1,12 +1,14 @@
 <template>
   <div class="net-error-container">
     <p>net error</p>
+    <p>{{ msg }}</p>
     <p>{{ state }}</p>
     <p>
       <button @click="inc">click me</button>
     </p>
     <p>
       <button @click="close()">close</button>
+      <button @click="addMsg">addMsg</button>
     </p>
   </div>
 </template>
@@ -18,15 +20,12 @@ import { createVfModal, VfMODAL_STORE_KEY } from '/vf-modal/index'
 import { Emitter } from 'mitt'
 
 export default defineComponent({
+  name: 'Test',
   props: {
     msg: {
       default: 'netError',
       type: String
     },
-    emitter: {
-      type: Object as PropType<Emitter>,
-      required: true
-    }
   },
   setup (props, { emit }) {
     const { state, inc } = useStore()
@@ -40,13 +39,18 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      props.emitter.emit('hhh')
+      // props.emitter.emit('hhh')
     })
+
+    const addMsg = () => {
+      baseState.emitter.emit('hhh')
+    }
 
     return {
       state,
       inc,
-      close
+      close,
+      addMsg
     }
   }
 })

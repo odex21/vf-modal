@@ -7,6 +7,7 @@
   </p>
   <p>
     <button @click="openModal('test')">open modal</button>
+    <button @click="addMsg">open modal</button>
   </p>
 </template>
 
@@ -27,14 +28,19 @@ export default defineComponent({
   },
   setup () {
     const count = ref(0)
+    const msg = ref('a')
     const openModal = async () => {
-
-      const { emitter, isClosed } = Controller.open('test')
+      const { emitter, isClosed } = Controller.open('test', { msg })
       emitter.on('hhh', () => {
         console.log('on hhh')
+        addMsg()
       })
       await isClosed()
       console.log('close  sss')
+    }
+
+    const addMsg = () => {
+      msg.value += 'a'
     }
 
     onMounted(() => {
@@ -43,7 +49,8 @@ export default defineComponent({
 
     return {
       count,
-      openModal
+      openModal,
+      addMsg
     }
   }
 })
