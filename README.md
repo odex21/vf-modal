@@ -1,6 +1,36 @@
 # vf-modal
 ## 基于Vue的模态对话框函数包装器
-使用 tsx 开发，提供完善的类型支持
+
+
+### Import
+1. 这应该是支持vue2的最后一个版本，后续大概率不会用新功能增加
+2. 支持Vue3的版本会版本号会变成“0.1.x”，vue2的版本则会是“0.0.x”
+
+
+### News Feature
+支持 ```@vue/composition-api```. 如果你用了 ```@vue/composition-api```，可以
+  ```js
+  import { createVfModal, createUseModal } from 'vf-modal'
+  const modal = createVfModal({
+    error: [
+      {
+        component: ErrorComponent
+        }
+    ]
+  }) 
+
+  const useModal = createUseModal(modal)
+
+  // 在用了```@vue/composition-api```定义的组件里
+  import { defineComponent } from '@vue/composition-api'
+  defineComponent({
+    setup(){
+      // opoenModal等同于原来的modal，拥有完全一样的类型
+      const { openModal } = useModal()
+    }
+  })
+  ```
+
 
 ### Install
 
