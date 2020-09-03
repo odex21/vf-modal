@@ -8,12 +8,14 @@
   <p>
     <button @click="openModal('test')">open modal</button>
     <button @click="addMsg">open modal</button>
+    <button @click="logMsg">msg</button>
   </p>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, nextTick } from 'vue'
 import { Controller } from './modalA'
+import { Message } from '../components/Message'
 
 export default defineComponent({
   name: 'HelloWorld',
@@ -43,6 +45,10 @@ export default defineComponent({
       msg.value += 'a'
     }
 
+    const logMsg = () => {
+      Message('test msg')
+    }
+
     onMounted(() => {
       // openModal()
     })
@@ -50,7 +56,8 @@ export default defineComponent({
     return {
       count,
       openModal,
-      addMsg
+      addMsg,
+      logMsg
     }
   }
 })

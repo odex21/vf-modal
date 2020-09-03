@@ -28,13 +28,18 @@ interface CreateConfig<T extends ModalMap> {
     };
     multipleModal?: boolean;
     closeWhenRouteChanges?: boolean;
+    fixWrapperClassname?: string;
 }
 interface VfModalInstanceState {
     renderList: RenderList;
     close: (key?: string) => void;
     emitter: Emitter;
 }
-declare type RenderList = UnwrapRef<Required<Omit<ModalObj, 'component'>>[]>;
+declare type RenderItemOptTemp = Required<Omit<ModalObj, 'component'>>;
+interface RenderItemOpt extends RenderItemOptTemp {
+    mutiKey?: string;
+}
+declare type RenderList = UnwrapRef<RenderItemOpt[]>;
 export declare const VfMODAL_STORE_KEY: InjectionKey<VfModalInstanceState>;
 export declare const createVfModal: <T extends ModalMap>(config: CreateConfig<T>) => {
     VfModal: {
@@ -49,8 +54,12 @@ export declare const createVfModal: <T extends ModalMap>(config: CreateConfig<T>
         open: (key: keyof T & string, props?: Record<string, any>, zIndex?: number) => {
             emitter: Emitter;
             isClosed: () => Promise<unknown>;
+            close: () => void;
         };
-        close: (key?: (keyof T & string) | undefined, closeModal?: boolean) => void;
+        close: (key?: (keyof T & string) | undefined, opt?: {
+            closeModal?: boolean | undefined;
+            mutiKey?: string | undefined;
+        } | undefined) => void;
         isClosed: (key?: (keyof T & string) | undefined) => Promise<void>;
     };
 };

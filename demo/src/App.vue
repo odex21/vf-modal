@@ -6,14 +6,17 @@
   <img alt="Vue logo" src="./assets/logo.png" />
   <router-view />
   <modal-test />
+  <message-modal />
 </template>
 
 <script>
 import { ModalTest } from './components/modalA'
+import { MessageModal } from './components/Message'
 
 export default {
   name: 'App',
   components: {
+    MessageModal,
     ModalTest
   }
 }
