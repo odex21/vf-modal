@@ -36,6 +36,14 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
+      - uses: actions/download-artifact@v2
+        with:   
+          name: dist
+          path: dist
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Display structure of downloaded files
+        run: cd dist && ls -R
       - run: npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

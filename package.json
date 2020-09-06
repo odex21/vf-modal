@@ -1,6 +1,6 @@
 {
   "name": "vf-modal",
-  "version": "0.1.0-beta.12",
+  "version": "0.1.0-beta.13",
   "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
@@ -69,8 +69,5 @@
   "author": {
     "name": "odex21",
     "email": "odex_2100@outlook.com"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   }
 }
