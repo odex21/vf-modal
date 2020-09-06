@@ -40,9 +40,7 @@ jobs:
         with:   
           name: dist
           path: dist
-      - name: Display structure of downloaded files
-        run: ls -R
-      - name: Display structure of downloaded files
+      - name: Display structure of prepublished files
         run: cd dist && ls -R
       - run: npm publish --tag beta
         env:
