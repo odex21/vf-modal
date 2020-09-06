@@ -16,8 +16,8 @@ jobs:
         with:
           node-version: 14
       - uses: Borales/actions-yarn@v2.3.0
-      - run: yarn
-      - run: yarn test
+        with: 
+          cmd: install
 
   publish-npm:
     needs: build
@@ -28,9 +28,13 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - uses: Borales/actions-yarn@v2.3.0    
-      - run: yarn 
-      - run: npm publish
+      - uses: Borales/actions-yarn@v2.3.0
+        with: 
+          cmd: install
+      - uses: Borales/actions-yarn@v2.3.0
+        with: 
+          cmd: build
+      - run: npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
