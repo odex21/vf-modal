@@ -14,7 +14,6 @@
     "dev:esm": "node scripts/dev.js",
     "test": "jest",
     "babel": "babel src/test.tsx --config-file ./babel.config.js",
-    "prepublishOnly": "yarn build"
   },
   "files": [
     "dist",
