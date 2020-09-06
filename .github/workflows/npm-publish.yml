@@ -15,12 +15,15 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-      - uses: Borales/actions-yarn@v2.3.0
-        with: 
-          cmd: install
-      - uses: Borales/actions-yarn@v2.3.0
-        with: 
-          cmd: build
+      - uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: install # will run `yarn install` command
+      - uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: build # will run `yarn build` command
+      # - uses: borales/actions-yarn@v2.0.0
+      #   with:
+      #     cmd: test # will run `yarn test` command
 
   publish-npm:
     needs: build
@@ -31,20 +34,20 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: npm publish --tag beta
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
-#   publish-gpr:
-#     needs: build
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: actions/setup-node@v1
-#         with:
-#           node-version: 14
-#           registry-url: https://npm.pkg.github.com/
-#       - run: npm ci
-#       - run: npm publish
-#         env:
-#           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  # publish-gpr:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 12
+  #         registry-url: https://npm.pkg.github.com/
+  #     - run: npm ci
+  #     - run: npm publish
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
