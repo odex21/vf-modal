@@ -1,5 +1,6 @@
 import { createVfModal } from '/vf-modal/index'
 import MessageVue from './main.vue'
+import Container from './container.vue'
 
 const { Controller, VfModal } = createVfModal({
   modals: {
@@ -12,6 +13,7 @@ const { Controller, VfModal } = createVfModal({
   },
   multipleModal: true,
   fixWrapperClassname: 'msg-wrapper',
+  container: Container
 })
 
 export interface MessageOptions {

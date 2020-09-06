@@ -1,4 +1,4 @@
-import { UnwrapRef, TransitionProps, InjectionKey } from 'vue';
+import { UnwrapRef, TransitionProps, InjectionKey, Component } from 'vue';
 import { Emitter } from 'mitt';
 interface ModalObj {
     component: any;
@@ -29,6 +29,7 @@ interface CreateConfig<T extends ModalMap> {
     multipleModal?: boolean;
     closeWhenRouteChanges?: boolean;
     fixWrapperClassname?: string;
+    container?: string | Component;
 }
 interface VfModalInstanceState {
     renderList: RenderList;

@@ -1,6 +1,6 @@
 <template>
   <div class="h-msg-box-container">
-    <div v-if="title" class="msg-box-title">{{ title }}</div>
+    <!-- <p v-if="title" class="msg-box-title">{{ title }}</p> -->
     <div class="msg-box-content">{{ text }}</div>
   </div>
 </template>
@@ -25,4 +25,9 @@ export default defineComponent({
 </script>
 
 <style>
+.h-msg-box-container {
+  transition: all 0.8s ease;
+  margin-top: 10px;
+  width: 300px;
+}
 </style>

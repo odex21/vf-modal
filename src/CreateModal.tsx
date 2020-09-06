@@ -1,4 +1,4 @@
-import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey, shallowReactive } from 'vue'
+import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey, Component } from 'vue'
 import { useRoute } from "vue-router"
 import { mergeDeepRight } from 'ramda'
 import mitt, { Emitter } from 'mitt'
@@ -34,6 +34,7 @@ interface CreateConfig<T extends ModalMap> {
   multipleModal?: boolean
   closeWhenRouteChanges?: boolean,
   fixWrapperClassname?: string
+  container?: string | Component
 }
 
 const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
@@ -47,7 +48,8 @@ const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
   },
   on: {
   },
-  closeWhenRouteChanges: true
+  closeWhenRouteChanges: true,
+  container: 'div'
 }
 
 interface VfModalInstanceState {
@@ -70,7 +72,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
   type ModalKey = (keyof T) & string
 
   const { modals } = config
-  const { provide: customProvide, transition, maskWrapper, on, multipleModal, closeWhenRouteChanges, fixWrapperClassname } = mergeDeepRight(defaultCreateConfig, config)
+  const { provide: customProvide, transition, maskWrapper, on, multipleModal, closeWhenRouteChanges, fixWrapperClassname, container } = mergeDeepRight(defaultCreateConfig, config)
   const renderList: RenderList = reactive([])
 
   /**
@@ -211,7 +213,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
       const rlist = computed(() => {
         return renderList.filter(el => el.isOpened).map(el => {
-          const { key, props } = el
+          const { key, props, mutiKey } = el
           const component = modals[ key ].component
 
           if (el.zIndex !== undefined) {
@@ -222,7 +224,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             close(key, { closeModal })
           }
 
-          return <component {...props} onClose={handlerClose} name={key} style={{ zIndex: el.zIndex }}></component>
+          return <component {...props} onClose={handlerClose} name={key} key={mutiKey} style={{ zIndex: el.zIndex }}></component>
         })
 
       })
@@ -233,12 +235,12 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             class={fixWrapperClassname || 'vf-modal-fixed-wrapper'}
             v-show={isModalOpened.value}
           >
-            <div
+            <container
               style={{ zIndex: 1 }}
               class="vf-modal-container-wrapper"
             >
               {rlist.value}
-            </div>
+            </container>
             <div style={{ zIndex: 0 }} onClick={maskWrapper?.clickHandler} class={maskWrapper?.classname}></div>
           </div>
         </Transition>
