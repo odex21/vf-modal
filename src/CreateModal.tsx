@@ -1,17 +1,27 @@
 import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey, Component } from 'vue'
 import { useRoute } from "vue-router"
-import { mergeDeepRight } from 'ramda'
-import mitt, { Emitter } from 'mitt'
+import { mergeDeepRight, mergeRight } from 'ramda'
+import mitt, { Emitter, Handler } from 'mitt'
 
+export interface EventMap {
+  [ x: string ]: Handler
+}
+
+export interface OpenOptions {
+  props?: Record<string, any>
+  on?: EventMap
+  zIndex?: number
+}
 interface ModalObj {
   component: any
   zIndex?: number
   isOpened?: boolean
   key?: string
-  props?: Record<string, any>
+  props?: Record<string, any>,
+  on?: EventMap
 }
 interface ModalMap {
-  [ index: string ]: Omit<ModalObj, 'key' | 'props'>
+  [ index: string ]: Omit<ModalObj, 'key' | 'on' | 'props'>
 }
 
 type Listener = (...args: any[]) => any
@@ -106,13 +116,14 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
   /**
    * open a modal with key
-   * @return {Promise}  a promise that resolve when modal close
    */
-  const open = (key: ModalKey, props: Record<string, any> = {}, zIndex = 1) => {
+  const open = (key: ModalKey, opt?: OpenOptions) => {
+
+    const { zIndex, props, on } = mergeRight({ zIndex: 1, props: {}, on: {} }, opt || {})
 
     isModalOpened.value = true
 
-    const item = { isOpened: true, zIndex, key, props, }
+    const item = { isOpened: true, zIndex, key, props, on }
     let mutiKey: string
 
     if (multipleModal) {
@@ -128,7 +139,6 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
     }
 
     return {
-      emitter,
       isClosed: () => new Promise((resolve) => {
         const unWatch = watch(() => item.isOpened, (value) => {
           if (!value) {
@@ -213,7 +223,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
       const rlist = computed(() => {
         return renderList.filter(el => el.isOpened).map(el => {
-          const { key, props, mutiKey } = el
+          const { key, props, mutiKey, on } = el
           const component = modals[ key ].component
 
           if (el.zIndex !== undefined) {
@@ -224,7 +234,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             close(key, { closeModal })
           }
 
-          return <component {...props} onClose={handlerClose} name={key} key={mutiKey} style={{ zIndex: el.zIndex }}></component>
+          return <component {...props} onClose={handlerClose} on={on} name={key} key={mutiKey} style={{ zIndex: el.zIndex }}></component>
         })
 
       })
@@ -257,6 +267,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
   return {
     VfModal,
-    Controller
+    Controller,
+    emitter,
   }
 }

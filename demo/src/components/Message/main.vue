@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 
 export default defineComponent({
   name: 'HMessage',
@@ -20,6 +20,13 @@ export default defineComponent({
       required: false,
       default: ''
     }
+  },
+  emits: [ 'on-mounted' ],
+  setup (_, { emit }) {
+    onMounted(() => {
+      console.log('log')
+      emit('on-mounted')
+    })
   }
 })
 </script>

@@ -3,7 +3,11 @@ module.exports = {
     "@babel/preset-typescript"
   ],
   "plugins": [
-    "@ant-design-vue/babel-plugin-jsx",
+    [
+      "@ant-design-vue/babel-plugin-jsx", {
+        transformOn: true
+      }
+    ],
     "@babel/plugin-proposal-optional-chaining"
   ],
   "env": {
