@@ -111,6 +111,9 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
    * @param zIndex {number}
    */
   const open = (key: ModalKey, props: Record<string, any> = {}, zIndex = 1) => {
+    if (!key || typeof key !== 'string') {
+      throw new Error('must have a key')
+    }
 
     isModalOpened.value = true
 
@@ -216,7 +219,12 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
       const rlist = computed(() => {
         return renderList.filter(el => el.isOpened).map(el => {
           const { key, props, mutiKey } = el
+
+          if (!modals[ key ]) {
+            throw new Error(`can not find the modal by key: ${key}`)
+          }
           const component = modals[ key ].component
+
 
           if (el.zIndex !== undefined) {
             el.zIndex = 1
