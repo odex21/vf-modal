@@ -1,4 +1,5 @@
-# vf-modal
+# vf-modal [![beta](https://img.shields.io/npm/v/vf-modal/beta.svg)](https://www.npmjs.com/package/vf-modal/v/beta)
+
 ## A simple modal framework for vue3.
 
 ## Todo 
@@ -107,6 +108,12 @@ $ yarn add vf-modal
 ```js
 import { Controller } from './modal'
 
+/**
+ * open a modal with key
+ * @param key {ModalKey}
+ * @param props {Record<string, any>} props of the modal component
+ * @param zIndex {number}
+ */
 Controller.open('net')
 ```
 

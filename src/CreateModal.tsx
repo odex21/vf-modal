@@ -106,7 +106,9 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
   /**
    * open a modal with key
-   * @return {Promise}  a promise that resolve when modal close
+   * @param key {ModalKey}
+   * @param props {Record<string, any>}
+   * @param zIndex {number}
    */
   const open = (key: ModalKey, props: Record<string, any> = {}, zIndex = 1) => {
 
