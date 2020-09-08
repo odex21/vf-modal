@@ -46,7 +46,13 @@ export default defineComponent({
     }
 
     const logMsg = () => {
-      Message('test msg')
+      Message('test msg', {
+        on: {
+          'on-mounted': (...args: any[]) => {
+            console.log('mounted', ...args)
+          }
+        }
+      })
     }
 
     onMounted(() => {

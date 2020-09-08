@@ -1,6 +1,8 @@
-import { createVfModal } from '/vf-modal/index'
+import { createVfModal, EventMap } from '/vf-modal/index'
 import MessageVue from './main.vue'
 import Container from './container.vue'
+import { Handler } from 'mitt'
+import { mergeRight } from 'ramda'
 
 const { Controller, VfModal } = createVfModal({
   modals: {
@@ -17,16 +19,20 @@ const { Controller, VfModal } = createVfModal({
 })
 
 export interface MessageOptions {
-  title: string
-  timeout: number
+  title?: string
+  timeout?: number,
+  on?: EventMap
 }
 
 const Message = (msg: string, opt?: MessageOptions) => {
-  const { timeout, title } = opt || { timeout: 2000 }
+  const { timeout, title, on } = mergeRight({ timeout: 2000, title: '', on: {} } as MessageOptions, opt || {},)
 
   const { close } = Controller.open('msg', {
-    text: msg,
-    title
+    props: {
+      text: msg,
+      title
+    },
+    on
   })
 
   setTimeout(() => {
