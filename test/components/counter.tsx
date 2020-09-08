@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export const Counter = defineComponent({
   name: 'Counter',
@@ -8,22 +8,25 @@ export const Counter = defineComponent({
       default: 'abc'
     }
   },
+  setup () {
+    const count = ref(0)
+    const increment = () => count.value++
 
-  data () {
     return {
-      count: 0
+      count,
+      increment
     }
   },
-
-  methods: {
-    increment () {
-      this.count++
-    }
+  render () {
+    return <div>
+      <span class="count">{this.count}</span>
+      <button onClick={this.increment}>Increment</button>
+    </div>
   },
-  template: `
-  <div>
-  <span class="count">{{ count }}</span>
-  <button @click="increment">Increment</button>
-  </div>
-  `
+  // template: `
+  // <div>
+  // <span class="count">{{ count }}</span>
+  // <button @click="increment">Increment</button>
+  // </div>
+  // `
 })

@@ -13,9 +13,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, nextTick } from 'vue'
+import { defineComponent, ref, onMounted, nextTick, unref, proxyRefs, isRef } from 'vue'
 import { Controller } from './modalA'
 import { Message } from '../components/Message'
+
 
 export default defineComponent({
   name: 'HelloWorld',
@@ -28,21 +29,29 @@ export default defineComponent({
     },
 
   },
-  setup () {
+  setup (props,) {
     const count = ref(0)
     const msg = ref('a')
+    console.log('is ref msg hello', isRef(props.msg))
+
     const openModal = async () => {
-      const { emitter, isClosed } = Controller.open('test', { msg })
-      emitter.on('hhh', () => {
-        console.log('on hhh')
-        addMsg()
+      const { isClosed } = Controller.open('test', {
+        props: { msg },
+        on: {
+          hhh: () => {
+            console.log('on hhh')
+            addMsg()
+          }
+        }
       })
-      await isClosed()
+      // await isClosed()
+      await Controller.isClosed()
       console.log('close  sss')
     }
 
     const addMsg = () => {
       msg.value += 'a'
+
     }
 
     const logMsg = () => {

@@ -4,7 +4,7 @@ module.exports = {
   ],
   "plugins": [
     [
-      "@ant-design-vue/babel-plugin-jsx", {
+      "@vue/babel-plugin-jsx", {
         transformOn: true
       }
     ],
