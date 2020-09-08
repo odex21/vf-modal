@@ -1,67 +1,59 @@
-import { createWrapper } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import { createVfModal } from '../src/index'
 import ModeA from './components/ModeA.vue'
+import { nextTick } from 'vue'
 
-describe.only('test prpos', () => {
-  const dialog = createVfModal({
-    test: [
-      {
+describe('test prpos', () => {
+  const { VfModal, Controller } = createVfModal({
+    modals: {
+      test: {
         component: ModeA,
-        ref: 'modeA',
-        defaultProps: {
-          a: 'test'
-        }
       },
-      {
-        component: 'div',
-        className: 'custom-div'
-      }
-    ]
+    },
+    closeWhenRouteChanges: false
   })
 
-  it('send props', async () => {
-    const { instance } = await dialog({
-      type: 'test',
-      awaitClose: false,
+  const wrapper = mount(VfModal)
+
+
+  it('test props with a sfc component', async () => {
+    Controller.open('test', {
       props: {
-        b: 123
+        b: 123,
+        a: 'test'
       }
     })
+    await nextTick()
+    const instance = wrapper.getComponent(ModeA)
 
-    expect(instance.$refs.modeA.a).toBe('test')
-    expect(instance.$refs.modeA.b).toBe(123)
+    expect((instance.vm as any).a).toBe('test')
+    expect((instance.vm as any).b).toBe(123)
   })
 
-  it('test runOn', async () => {
-    let type, a, b
-    const { instance } = await dialog({
-      type: 'test',
-      awaitClose: false,
+  it('test On  a sfc component', async () => {
+    let type
+    Controller.open('test', {
       props: {
-        b: 123
+        b: 123,
+        a: '123',
       },
       on: {
-        event: (instance, ...args) => {
-          [ type, a, b ] = args
+        event: () => {
+          type = 'event'
+          console.log('hahahaha')
         },
-        customEvent: {
-          name: 'test',
-          fn: (instance, ...args) => {
-            [ type, a, b ] = args
-          }
+        customEvent: () => {
+          type = 'customEvent'
         }
       }
     })
+    await nextTick()
 
-    const wrapper = createWrapper(instance)
     const eventButton = wrapper.find('.event')
     const customButton = wrapper.find('.customEvent')
+
     eventButton.trigger('click')
     expect(type).toBe('event')
-    expect(a).toBe('test')
-    expect(b).toBe(123)
-
-
     customButton.trigger('click')
     expect(type).toBe('customEvent')
   })

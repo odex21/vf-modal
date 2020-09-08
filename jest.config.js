@@ -17,17 +17,17 @@ module.exports = {
   },
   collectCoverage: true,
   coverageDirectory: 'coverage',
-  coverageReporters: [ 'html', 'lcov', 'text' ],
+  coverageReporters: ['html', 'lcov', 'text'],
   collectCoverageFrom: [
     'src/*.tsx',
     'src/*.ts'
   ],
   // watchPathIgnorePatterns: ['/node_modules/', '/dist/', '/.git/'],
-  moduleFileExtensions: [ 'ts', 'tsx', 'js', 'json', 'vue' ],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'vue'],
   transform: {
     "^.+\\.[jt]sx?$": "babel-jest",
     // 用 `vue-jest` 处理 `*.vue` 文件
-    ".*\\.(vue)$": "vue-jest",
+    "^.+\\.vue$": "vue-jest"
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
@@ -35,5 +35,5 @@ module.exports = {
     "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules"
   },
   rootDir: __dirname,
-  transformIgnorePatterns: [ '<rootDir>/node_modules/' ]
+  transformIgnorePatterns: ['<rootDir>/node_modules/']
 }

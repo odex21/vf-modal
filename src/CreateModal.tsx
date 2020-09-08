@@ -1,4 +1,4 @@
-import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey, Component } from 'vue'
+import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey, Component, markRaw, shallowReactive } from 'vue'
 import { useRoute } from "vue-router"
 import { mergeDeepRight, mergeRight } from 'ramda'
 import mitt, { Emitter, Handler } from 'mitt'
@@ -119,11 +119,15 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
    */
   const open = (key: ModalKey, opt?: OpenOptions) => {
 
+    if (!modals[ key ]) {
+      throw new Error(`can not find the modal by key: ${key}`)
+    }
+
     const { zIndex, props, on } = mergeRight({ zIndex: 1, props: {}, on: {} }, opt || {})
 
     isModalOpened.value = true
 
-    const item = { isOpened: true, zIndex, key, props, on }
+    const item = shallowReactive({ isOpened: true, zIndex, key, props, on })
     let mutiKey: string
 
     if (multipleModal) {
@@ -133,19 +137,27 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
       const target = renderList.find(el => el.key === key)
       if (target) {
         target.isOpened = true
+        // update props and listeners
+        target.props = props
+        target.on = on//markRaw(on)
       } else {
         renderList.push(item)
       }
     }
 
     return {
-      isClosed: () => new Promise((resolve) => {
+      renderList,
+      isClosed: () => new Promise<void>((resolve) => {
+        if (!item.isOpened) {
+          resolve()
+          return
+        }
         const unWatch = watch(() => item.isOpened, (value) => {
           if (!value) {
-            unWatch()
             resolve()
+            unWatch()
           }
-        })
+        }, { immediate: true })
       }),
       close: () => {
         close(key, { mutiKey, closeModal: false })
@@ -225,11 +237,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
         return renderList.filter(el => el.isOpened).map(el => {
           const { key, props, mutiKey, on } = el
 
-          if (!modals[ key ]) {
-            throw new Error(`can not find the modal by key: ${key}`)
-          }
           const component = modals[ key ].component
-
 
           if (el.zIndex !== undefined) {
             el.zIndex = 1

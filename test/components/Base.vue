@@ -6,6 +6,7 @@
 </template>
 <script>
 export default {
+  emits: ['close'],
   methods: {
     handleClick() {
       this.$emit('close', 'custom')
