@@ -26,12 +26,17 @@ interface ModalMap {
 
 type Listener = (...args: any[]) => any
 
+type CreateReturn = ReturnType<typeof createVfModal>//Pick<, K>
+type Controller = Pick<CreateReturn, 'Controller'> extends { [ x: string ]: infer U } ? U : never
+type VfModal = Pick<CreateReturn, 'VfModal'> extends { [ x: string ]: infer U } ? U : never
+
 interface CreateConfig<T extends ModalMap> {
   modals: T
   provide?: () => void
   maskWrapper?: {
-    clickHandler?: Listener
-    classname: string
+    clickHandler?: (controller: Controller, emiiter: Emitter, instance: VfModal) => void
+    autoCloseModal?: boolean
+    classname?: string
   }
   transition?: {
     name: string
@@ -54,6 +59,7 @@ const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
   },
   maskWrapper: {
     clickHandler: () => { },
+    autoCloseModal: false,
     classname: 'vf-modal-mask-wrapper'
   },
   on: {
@@ -252,6 +258,14 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
       })
 
+      const handleClickMaskWrapper = () => {
+        if (maskWrapper?.autoCloseModal) {
+          close()
+        } else if (maskWrapper?.clickHandler) {
+          maskWrapper.clickHandler(Controller, emitter, VfModal)
+        }
+      }
+
       return () => (
         <Transition name={transition!.name} type={transition!.type} onAfterEnter={handlerOnAfterEnter} onAfterLeave={handlerOnAfterLeave}>
           <div
@@ -264,7 +278,11 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             >
               {rlist.value}
             </container>
-            <div style={{ zIndex: 0 }} onClick={maskWrapper?.clickHandler} class={maskWrapper?.classname}></div>
+            <div
+              style={{ zIndex: 0 }}
+              onClick={handleClickMaskWrapper}
+              class={maskWrapper?.classname}>
+            </div>
           </div>
         </Transition>
       )

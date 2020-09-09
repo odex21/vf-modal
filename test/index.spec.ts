@@ -47,9 +47,11 @@ describe('load a simple vue component', () => {
 
 
   it('error type should throw error', async () => {
-    expect(() => {
+    try {
       Controller.open('a')
-    }).toThrow()
+    } catch (error) {
+      expect(error.message).toBe('can not find the modal by key: a')
+    }
   })
 
   it('miss type should throw error', async () => {
@@ -116,34 +118,27 @@ describe('close event handler', () => {
 
 
 
-  // it('click mask should do nothing', async () => {
-  //   const dialog = createVfModal({
-  //     abCd: [
-  //       {
-  //         component: Base,
-  //         ref: 'base',
-  //       }
-  //     ]
-  //   }, {
-  //     containerClass: 'custom-wrapper',
-  //     containerStyle: {
-  //       background: 'red'
-  //     },
-  //   })
-  //   const getWrapper = async () => {
-  //     const { instance } = await dialog({ type: 'abCd', awaitClose: false })
-  //     return { wrapper: createWrapper(instance), instance }
-  //   }
+  it('click mask should do nothing', async () => {
+    const { Controller, VfModal } = createVfModal({
+      modals: {
+        abCd:
+        {
+          component: Base,
+          ref: 'base',
+        }
+      },
+      maskWrapper: { autoCloseModal: true },
+      closeWhenRouteChanges: false
+    })
 
+    const Wrapper = mount(VfModal)
+    const { renderList } = Controller.open('abCd')
+    expect(renderList.find(el => el.key === 'abCd')!.isOpened).toBeTruthy()
 
-  //   const { instance, wrapper } = await getWrapper()
-  //   const mask = wrapper.find('.mask-wrapper')
-  //   mask.trigger('click')
-  //   expect(instance.closed).toBe(false)
-  //   await Vue.nextTick()
-  //   expect(instance.visible).toBe(true)
+    Wrapper.find('.vf-modal-mask-wrapper').trigger('click')
 
-  // })
+    expect(renderList.length).toBe(0)
+  })
 
 
 
