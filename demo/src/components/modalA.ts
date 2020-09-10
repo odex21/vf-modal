@@ -15,11 +15,19 @@ const { VfModal, Controller } = createVfModal({
     }
   },
   provide: provideStore,
-})
+  on: {
+    modalClose: () => {
+      console.log('close 1')
+    },
+    modalOpen: () => {
+      console.log('open 2')
 
+    }
+  }
+})
 
 export {
   VfModal as ModalTest,
-  Controller
+  Controller,
 }
 

@@ -64,7 +64,7 @@ const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
   },
   on: {
   },
-  closeWhenRouteChanges: true,
+  closeWhenRouteChanges: false,
   container: 'div'
 }
 
@@ -180,10 +180,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
     if (key) {
       const k = mutiKey || key
       const _k = mutiKey ? 'mutiKey' : 'key'
-      const target = renderList.find(el => el[ _k ] === k && el.isOpened)
-      if (target) {
-        target.isOpened = false
-      }
+      renderList.filter(el => el[ _k ] === k && el.isOpened).forEach(e => e.isOpened = false)
     }
     if (!key || closeModal || renderList.filter(el => el.isOpened).length === 0) {
       // clear renderlist
@@ -195,16 +192,15 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
   /**
    * return a promise that resolve when modal close
    */
-  const isClosed = (key?: ModalKey) => new Promise<void>((resolve, reject) => {
+  const isClosed = () => new Promise<void>((resolve, reject) => {
+    if (!visible.value) {
+      resolve()
+      return
+    }
+
+    // worry about memory leaks
     const unWatch = watch(visible, () => {
       if (!visible.value) {
-        if (key) {
-          const target = renderList.find(el => el.key === key)
-          // not target modal closed
-          if (target?.isOpened) {
-            return
-          }
-        }
         unWatch()
         resolve()
       }

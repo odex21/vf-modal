@@ -1,12 +1,12 @@
 <template>
   <div>
     <h1>Home</h1>
-    <HelloWorld />
+    <HelloWorld :msg="msg" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 // import {  } from "/@/"
 import HelloWorld from '../components/HelloWorld.vue'
 
@@ -15,7 +15,11 @@ export default defineComponent({
     HelloWorld
   },
   setup () {
+    const msg = ref('changed !')
 
+    return {
+      msg
+    }
   }
 })
 </script>

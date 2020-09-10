@@ -1,7 +1,7 @@
 <template>
   <div class="net-error-container">
     <p>net error</p>
-    <p>{{ msg }}</p>
+    <p>{{ msg.msg.value }}</p>
     <p>{{ state }}</p>
     <p>
       <button @click="inc">click me</button>
@@ -13,7 +13,7 @@
   </div>
 </template>
 <script lang="ts">
-import Vue, { defineComponent, inject, PropType, onMounted } from 'vue'
+import Vue, { defineComponent, inject, PropType, onMounted, isRef } from 'vue'
 import { useStore } from '../modalShare'
 import { createVfModal, VfMODAL_STORE_KEY } from '/vf-modal/index'
 // import { VfMODAL_STORE_KEY } from '/vf-modal/'
@@ -23,15 +23,19 @@ export default defineComponent({
   name: 'Test',
   props: {
     msg: {
-      default: 'netError',
-      type: String
+      default: () => ({ msg: 'netError' }),
+      type: Object
     },
   },
+  emits: [ 'hhh', 'close' ],
   setup (props, { emit }) {
     const { state, inc } = useStore()
 
     const baseState = inject(VfMODAL_STORE_KEY)
     if (!baseState) throw Error('no data')
+
+    console.log('isRef', isRef(props.msg))
+
 
     const close = () => {
       emit('close')
@@ -39,11 +43,14 @@ export default defineComponent({
     }
 
     onMounted(() => {
+      console.log('hhhhhh')
+
+      emit('hhh')
       // props.emitter.emit('hhh')
     })
 
     const addMsg = () => {
-      baseState.emitter.emit('hhh')
+      emit('hhh')
     }
 
     return {

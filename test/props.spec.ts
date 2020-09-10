@@ -3,7 +3,7 @@ import { createVfModal } from '../src/index'
 import ModeA from './components/ModeA.vue'
 import { nextTick } from 'vue'
 
-describe('test prpos', () => {
+describe.skip('test prpos', () => {
   const { VfModal, Controller } = createVfModal({
     modals: {
       test: {

@@ -65,7 +65,7 @@ describe('load a simple vue component', () => {
 
 
 
-describe('close event handler', () => {
+describe.only('close event handler', () => {
 
   it('modal emit close event should close modal', async () => {
     const { VfModal, Controller } = createVfModal({
@@ -82,14 +82,12 @@ describe('close event handler', () => {
     await nextTick()
 
     const buttonEl = Wrapper.find('button')
-    sleep(200).then(() => {
-      buttonEl.trigger('click')
-    })
-    const state = await isClosed()
-    expect(state).toBeUndefined()
 
-    const item = renderList.find(el => el.key === 'test')
-    expect(item).toBeFalsy()
+    isClosed()
+      .then(() => {
+        expect(renderList.length).toBe(0)
+      })
+    buttonEl.trigger('click')
   })
 
 
@@ -111,10 +109,6 @@ describe('close event handler', () => {
     const item = renderList.find(el => el.key === 'test')
     expect(item).toBeFalsy()
   })
-
-  // const { instance, type } = await waitClose()
-  // expect(instance instanceof Vue).toBe(true)
-  // expect(type).toBe('custom')
 
 
 
@@ -142,28 +136,40 @@ describe('close event handler', () => {
 
 
 
-  // it('change closed on instance, closed only can be used to close modal', async () => {
-  //   const dialog = createVfModal({
-  //     abCd: [
-  //       {
-  //         component: Base,
-  //         ref: 'base',
-  //       }
-  //     ]
-  //   })
-  //   const { instance } = await dialog({ type: 'abCd', awaitClose: false })
+  it.only('close modal by Controller', async () => {
+    const { VfModal, Controller } = createVfModal({
+      modals: {
+        abCd: {
+          component: Base,
+        },
+        abCde: {
+          component: Base,
+        }
+      }
+    })
 
-  //   instance.closed = true
-  //   await Vue.nextTick()
-  //   expect(instance.visible).toBe(false)
+    const { renderList } = Controller.open('abCd')
+    mount(VfModal)
 
-  //   instance.closed = false
-  //   await Vue.nextTick()
-  //   expect(instance.visible).toBe(false)
+    Controller.isClosed()
+      .then(() => {
+        expect(renderList.length).toBe(0)
+      })
 
-  //   // await  transition
-  //   await sleep(1000)
-  // })
+    Controller.open('abCd')
+
+    await nextTick()
+
+    // wait transition
+    // await sleep(2000)
+
+    expect(renderList.length).toBe(1)
+
+
+    // Controller.close()
+    await sleep(3000)
+    await nextTick()
+  })
 })
 
 
