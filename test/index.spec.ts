@@ -65,7 +65,7 @@ describe('load a simple vue component', () => {
 
 
 
-describe.only('close event handler', () => {
+describe('close event handler', () => {
 
   it('modal emit close event should close modal', async () => {
     const { VfModal, Controller } = createVfModal({
@@ -136,7 +136,7 @@ describe.only('close event handler', () => {
 
 
 
-  it.only('close modal by Controller', async () => {
+  it('close modal by Controller', async () => {
     const { VfModal, Controller } = createVfModal({
       modals: {
         abCd: {
@@ -148,27 +148,15 @@ describe.only('close event handler', () => {
       }
     })
 
-    const { renderList } = Controller.open('abCd')
     mount(VfModal)
 
-    Controller.isClosed()
-      .then(() => {
-        expect(renderList.length).toBe(0)
-      })
+    const { renderList, isClosed } = Controller.open('abCd')
+    Controller.open('abCde')
 
-    Controller.open('abCd')
-
-    await nextTick()
-
-    // wait transition
-    // await sleep(2000)
-
-    expect(renderList.length).toBe(1)
-
-
-    // Controller.close()
-    await sleep(3000)
-    await nextTick()
+    expect(renderList.length).toBe(2)
+    Controller.close()
+    await isClosed()
+    expect(renderList.length).toBe(0)
   })
 })
 

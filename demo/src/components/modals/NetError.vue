@@ -1,7 +1,7 @@
 <template>
   <div class="net-error-container">
     <p>net error</p>
-    <p>{{ msg.msg.value }}</p>
+    <p>{{ msg }}</p>
     <p>{{ state }}</p>
     <p>
       <button @click="inc">click me</button>
@@ -20,11 +20,11 @@ import { createVfModal, VfMODAL_STORE_KEY } from '/vf-modal/index'
 import { Emitter } from 'mitt'
 
 export default defineComponent({
-  name: 'Test',
+  name: 'NetError',
   props: {
     msg: {
-      default: () => ({ msg: 'netError' }),
-      type: Object
+      type: String,
+      required: true
     },
   },
   emits: [ 'hhh', 'close' ],

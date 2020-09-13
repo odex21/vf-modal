@@ -1,4 +1,4 @@
-import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey, Component, markRaw, shallowReactive } from 'vue'
+import { provide, UnwrapRef, ref, Transition, defineComponent, TransitionProps, reactive, watch, computed, InjectionKey, Component, markRaw, shallowReactive, proxyRefs } from 'vue'
 import { useRoute } from "vue-router"
 import { mergeDeepRight, mergeRight } from 'ramda'
 import mitt, { Emitter, Handler } from 'mitt'
@@ -55,7 +55,7 @@ interface CreateConfig<T extends ModalMap> {
 const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
   transition: {
     name: 'vf-modal-fade',
-    type: 'animation'
+    type: 'transition'
   },
   maskWrapper: {
     clickHandler: () => { },
@@ -158,8 +158,8 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
           resolve()
           return
         }
-        const unWatch = watch(() => item.isOpened, (value) => {
-          if (!value) {
+        const unWatch = watch([ () => item.isOpened, () => renderList.length ] as const, ([ value, len ]) => {
+          if (!value || len === 0) {
             resolve()
             unWatch()
           }
@@ -249,7 +249,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             close(key, { closeModal })
           }
 
-          return <component {...props} onClose={handlerClose} on={on} name={key} key={mutiKey} style={{ zIndex: el.zIndex }}></component>
+          return <component {...proxyRefs(props)} onClose={handlerClose} on={on} name={key} key={mutiKey} style={{ zIndex: el.zIndex }}></component>
         })
 
       })

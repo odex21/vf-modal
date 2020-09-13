@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, nextTick, unref, proxyRefs } from 'vue'
+import { defineComponent, ref, onMounted, nextTick, unref, proxyRefs, isRef } from 'vue'
 import { Controller } from './modalA'
 import { Message } from '../components/Message'
 
@@ -29,12 +29,14 @@ export default defineComponent({
     },
 
   },
-  setup () {
+  setup (props,) {
     const count = ref(0)
     const msg = ref('a')
+    console.log('is ref msg hello', isRef(props.msg))
+
     const openModal = async () => {
       const { isClosed } = Controller.open('test', {
-        props: { msg: { msg } },
+        props: { msg },
         on: {
           hhh: () => {
             console.log('on hhh')
