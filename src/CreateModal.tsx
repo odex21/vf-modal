@@ -58,7 +58,6 @@ const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
     type: 'transition'
   },
   maskWrapper: {
-    clickHandler: () => { },
     autoCloseModal: false,
     classname: 'vf-modal-mask-wrapper'
   },
@@ -129,7 +128,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
       throw new Error(`can not find the modal by key: ${key}`)
     }
 
-    const { zIndex, props, on } = mergeRight({ zIndex: 1, props: {}, on: {} }, opt || {})
+    const { zIndex, props, on } = mergeRight({ zIndex: modals[ key ].zIndex || 1, props: {}, on: {} }, opt || {})
 
     isModalOpened.value = true
 
@@ -145,6 +144,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
         target.isOpened = true
         // update props and listeners
         target.props = props
+        target.zIndex = zIndex
         target.on = on//markRaw(on)
       } else {
         renderList.push(item)
@@ -240,10 +240,6 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
           const { key, props, mutiKey, on } = el
 
           const component = modals[ key ].component
-
-          if (el.zIndex !== undefined) {
-            el.zIndex = 1
-          }
 
           const handlerClose = (closeModal = true) => {
             close(key, { closeModal })

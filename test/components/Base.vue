@@ -6,10 +6,11 @@
 </template>
 <script>
 export default {
+  name: 'Base',
   emits: ['close'],
   methods: {
     handleClick() {
-      this.$emit('close', 'custom')
+      this.$emit('close')
     }
   }
 }
