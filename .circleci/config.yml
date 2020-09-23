@@ -1,0 +1,23 @@
+version: 2.1
+
+defaults: &defaults
+  docker:
+    - image: circleci/node
+
+step_install_deps: &install_deps
+  run:
+    name: Install Dependencies
+    command: yarn --frozen-lockfile
+
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - *install_deps
+      - run: yarn test --ci
+
+workflows:
+  ci:
+    jobs:
+      - test
