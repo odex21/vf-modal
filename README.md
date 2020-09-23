@@ -1,4 +1,4 @@
-# vf-modal [![beta](https://img.shields.io/npm/v/vf-modal/beta.svg)](https://www.npmjs.com/package/vf-modal/v/beta)
+# vf-modal [![beta](https://img.shields.io/npm/v/vf-modal/beta.svg)](https://www.npmjs.com/package/vf-modal/v/beta) [![CircleCI](https://circleci.com/gh/odex21/vf-modal/tree/next.svg?style=svg)](https://circleci.com/gh/odex21/vf-modal)
 
 ## A simple modal framework for vue3.
 
