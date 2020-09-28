@@ -40,7 +40,6 @@ describe('test prpos', () => {
       on: {
         event: () => {
           type = 'event'
-          console.log('hahahaha')
         },
         customEvent: () => {
           type = 'customEvent'

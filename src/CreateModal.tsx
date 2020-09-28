@@ -218,7 +218,6 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
         if (routerLink) {
           watch(() => routerLink.path, () => {
             if (isModalOpened.value) {
-              console.log('it should be close ')
               close()
             }
           })

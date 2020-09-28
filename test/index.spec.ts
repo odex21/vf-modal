@@ -1,16 +1,14 @@
 // Import the mount() method from the test utils
 // and the component you want to test
-import { mount, flushPromises } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import { Counter } from './components/counter'
 import { createVfModal } from '../src/index'
 import Base from './components/Base.vue'
-import { nextTick, onErrorCaptured, defineComponent, createApp } from 'vue'
+import { nextTick, onErrorCaptured, defineComponent, createVNode } from 'vue'
+import { sleep } from './utils'
+import { createRouter, createWebHashHistory, RouterView } from 'vue-router'
 
 jest.setTimeout(30 * 1000)
-// import { ComponentOptions } from 'vue/types/options'
-// type A = typeof Counter
-// type C = ComponentOptions<A>
-
 
 describe('load a simple vue component', () => {
   const { Controller, VfModal } = createVfModal({
@@ -243,48 +241,97 @@ describe('custom options', () => {
     expect((c.element as any).style.zIndex).toBe("100")
   })
 
-  // it('custom wrapper class', async () => {
-  //   const wrapper = await getWrapper()
-  //   const body = wrapper.vm.$refs.body
-  //   expect([ ...(body as any).classList ].some(e => e === 'custom-wrapper')).toBe(true)
-  // })
+  it('modal open/close hook should work well', async () => {
+    let index = 0
+    const { VfModal, Controller } = createVfModal({
+      modals: {
+        test: {
+          component: Base,
+          zIndex: 1000,
+        }
+      },
+      closeWhenRouteChanges: false,
+      on: {
+        modalOpen: () => index++,
+        modalClose: () => index++
+      }
+    })
 
+    const transitionStub = () => ({
+      render: function () {
+        return this.$options._renderChildren
+      }
+    })
 
-  // it('click mask should close modal', async () => {
-  //   const wrapper = await getWrapper()
-  //   const mask = wrapper.find('.mask-wrapper')
-  //   mask.trigger('click')
-  //   expect((wrapper.vm as any).closed).toBe(true)
-  // })
+    mount(VfModal, {
+      stubs: {
+        transition: transitionStub
+      }
+    })
 
+    Controller.open('test')
 
-  // it('custom wrapper style', async () => {
-  //   const wrapper = await getWrapper()
-  //   const body = wrapper.vm
-  //   expect(getComputedStyle(body.$el).background).toBe('red')
-  // })
+    await nextTick()
+    await sleep(500)
+    expect(index).toBe(1)
 
-  // it('custom runtime Class', async () => {
-  //   const { instance } = await dialog({
-  //     type: 'abCd',
-  //     awaitClose: false,
-  //     containerClass: 'run-time'
+    Controller.close()
+    await nextTick()
+
+    Controller.isClosed()
+      .then(() => {
+        expect(index).toBe(2)
+      })
+    await nextTick()
+    await sleep(500)
+    expect(await Controller.isClosed()).toBe(void 0)
+  })
+
+  // it.only('close when router changed', async () => {
+  //   const { VfModal, Controller } = createVfModal({
+  //     modals: {
+  //       test: {
+  //         component: Base,
+  //         zIndex: 1000,
+  //       }
+  //     },
+  //     closeWhenRouteChanges: true
   //   })
-  //   const wrapper = createWrapper(instance)
-  //   const body = wrapper.vm.$refs.body
-  //   expect([ ...(body as any).classList ].some(e => e === 'custom-wrapper')).toBe(true)
-  //   expect([ ...(body as any).classList ].some(e => e === 'run-time')).toBe(true)
-  // })
 
-
-  // it('custom mask-wrapper', async () => {
-  //   const { instance } = await dialog2({
-  //     type: 'abCd',
-  //     awaitClose: false,
+  //   const router = createRouter({
+  //     history: createWebHashHistory(),
+  //     routes: [
+  //       {
+  //         component: () => createVNode('div', null, 'home'),
+  //         path: '/'
+  //       },
+  //       {
+  //         component: () => createVNode('div', null, 'foo'),
+  //         path: '/foo'
+  //       },
+  //     ]
   //   })
-  //   const wrapper = createWrapper(instance)
-  //   const body = wrapper.vm.$refs.body
-  //   expect(wrapper.find('.custom-mask-wrapper')).not.toBeNull()
-  // })
 
+  //   shallowMount({
+  //     render: function (h) {
+  //       return h('div', null, [
+  //         h(RouterView),
+  //         VfModal
+  //       ])
+  //     }
+  //   }, { stubs: [ 'router-link', 'router-view' ] })
+
+
+  //   const { renderList } = Controller.open('test')
+
+  //   await nextTick()
+  //   expect(renderList.length).toBe(1)
+
+  //   await router.push('/foo')
+  //   await nextTick()
+  //   expect(router.currentRoute.value.path).toBe('/foo')
+  //   await nextTick()
+  //   await sleep(500)
+  //   expect(renderList.length).toBe(0)
+  // })
 })

@@ -1,14 +1,14 @@
 import { curry, find, memoizeWith, identity } from 'ramda'
 
-export const findKey = curry((arr, key) => !!find(e => e === key, arr))
+// export const findKey = curry((arr, key) => !!find(e => e === key, arr))
 export const prevent = (e: Event) => e.preventDefault()
 export const stop = (e: Event) => e.stopPropagation()
 
-export const generateClass = (list: string[]) =>
-  list.reduce((res, cur) => {
-    res += ' ' + cur
-    return res
-  }, '')
+// export const generateClass = (list: string[]) =>
+//   list.reduce((res, cur) => {
+//     res += ' ' + cur
+//     return res
+//   }, '')
 
 
 const camelizeRE = /-(\w)/g
