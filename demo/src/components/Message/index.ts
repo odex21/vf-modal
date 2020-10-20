@@ -10,7 +10,7 @@ const { Controller, VfModal } = createVfModal({
       component: MessageVue,
     }
   },
-  maskWrapper: {
+  mask: {
     classname: 'no-mask',
   },
   multipleModal: true,

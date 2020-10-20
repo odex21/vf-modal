@@ -125,7 +125,7 @@ describe('close handler', () => {
           ref: 'base',
         }
       },
-      maskWrapper: { autoCloseModal: true },
+      mask: { autoCloseModal: true },
       closeWhenRouteChanges: false
     })
 
@@ -147,7 +147,7 @@ describe('close handler', () => {
           ref: 'base',
         }
       },
-      maskWrapper: {
+      mask: {
         clickHandler: (controller, emitter, instance) => {
           controller.close()
         },

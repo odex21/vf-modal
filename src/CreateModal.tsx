@@ -21,7 +21,7 @@ interface ModalObj {
   on?: EventMap
 }
 interface ModalMap {
-  [ index: string ]: Omit<ModalObj, 'key' | 'on' | 'props'>
+  [ index: string ]: Pick<ModalObj, 'component' | 'zIndex' | 'on' | 'props'>
 }
 
 type Listener = (...args: any[]) => any
@@ -33,7 +33,7 @@ type VfModal = Pick<CreateReturn, 'VfModal'> extends { [ x: string ]: infer U } 
 interface CreateConfig<T extends ModalMap> {
   modals: T
   provide?: () => void
-  maskWrapper?: {
+  mask?: {
     clickHandler?: (controller: Controller, emiiter: Emitter, instance: VfModal) => void
     autoCloseModal?: boolean
     classname?: string
@@ -57,7 +57,7 @@ const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
     name: 'vf-modal-fade',
     type: 'transition'
   },
-  maskWrapper: {
+  mask: {
     autoCloseModal: false,
     classname: 'vf-modal-mask-wrapper'
   },
@@ -87,7 +87,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
   type ModalKey = (keyof T) & string
 
   const { modals } = config
-  const { provide: customProvide, transition, maskWrapper, on, multipleModal, closeWhenRouteChanges, fixWrapperClassname, container } = mergeDeepRight(defaultCreateConfig, config)
+  const { provide: customProvide, transition, mask, on, multipleModal, closeWhenRouteChanges, fixWrapperClassname, container } = mergeDeepRight(defaultCreateConfig, config)
   const renderList: RenderList = reactive([])
 
   /**
@@ -128,7 +128,13 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
       throw new Error(`can not find the modal by key: ${key}`)
     }
 
-    const { zIndex, props, on } = mergeRight({ zIndex: modals[ key ].zIndex || 1, props: {}, on: {} }, opt || {})
+    const { zIndex, props, on } = mergeRight({
+      zIndex: modals[ key ].zIndex || 1,
+      props: modals[ key ].props || {},
+      on: modals[ key ].on || {}
+    },
+      opt || {}
+    )
 
     isModalOpened.value = true
 
@@ -190,7 +196,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
   }
 
   /**
-   * return a promise that resolve when modal close
+   * returns a promise that will be resolved when the modal is closed
    */
   const isClosed = () => new Promise<void>((resolve, reject) => {
     if (!visible.value) {
@@ -249,11 +255,11 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 
       })
 
-      const handleClickMaskWrapper = () => {
-        if (maskWrapper?.autoCloseModal) {
+      const handleClickmask = () => {
+        if (mask?.autoCloseModal) {
           close()
-        } else if (maskWrapper?.clickHandler) {
-          maskWrapper.clickHandler(Controller, emitter, VfModal)
+        } else if (mask?.clickHandler) {
+          mask.clickHandler(Controller, emitter, VfModal)
         }
       }
 
@@ -271,8 +277,8 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             </container>
             <div
               style={{ zIndex: 0 }}
-              onClick={handleClickMaskWrapper}
-              class={maskWrapper?.classname}>
+              onClick={handleClickmask}
+              class={mask?.classname}>
             </div>
           </div>
         </Transition>
