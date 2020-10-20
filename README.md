@@ -3,9 +3,9 @@
 ## A simple modal framework for vue3.
 
 ## Todo 
-[x] add tests  
-[ ] build a docs  
-[ ] more demos  
+- [x] add tests  
+- [ ] build a docs  
+- [ ] more demos  
 
 ### Install
 
