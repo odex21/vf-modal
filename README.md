@@ -16,7 +16,7 @@ $ yarn add vf-modal
 ```
 ### Start 
 
->  It is compiled to es6, if you need compatibility with lower versions of browsers, you can refer to the following configuration
+>  It is compiled to es6 by default. If you need compatibility with lower versions of browsers, you can refer to the following configuration.
 
 1. Config Webpack or Vue CLI
    - Vue CLI
@@ -88,7 +88,7 @@ $ yarn add vf-modal
     }
     ```
 
-2. import ```VfModal``` to ```App.vue```
+2. import ```VfModal``` in ```App.vue```
     ```html
     <template>
       <router-view />
@@ -108,7 +108,7 @@ $ yarn add vf-modal
     ```
 
 
-3. Open a modal in anywhere
+3. Open a modal anywhere
     ```js
     import { Controller } from './modal'
 
@@ -138,8 +138,9 @@ $ yarn add vf-modal
 
 ### create config
 
-- modals: The map object of modal.
-  - type:
+- ```modals```: The map object of modal.
+  - ```type```:  
+   
      ```ts
      interface ModalObj {
       component: any
@@ -148,41 +149,49 @@ $ yarn add vf-modal
       on?: EventMap
     }
      ```
-  - component: vue componet
-  - zIndex: style z-index, which can be overridden on open 
-  - props: props of component, which can be overridden on open 
-  - on: listener of component, which can be overridden on open 
+
+  - ```component```: vue componet
+  - ```zIndex```: style z-index, which can be overridden on open 
+  - ```props```: props of component, which can be overridden on open 
+  - ```on```: listener of component, which can be overridden on open     
+     
      ```ts
      type Handler<T = any> = (event?: T) => void;
      interface EventMap {
        [ x: string ]: Handler
      }
      ``` 
-- provide: the function called in setup
-- mask: mask of modal
-  - clickHandler: the function called when mask is clicked
+
+- ```provide```: the function called in setup
+- ```mask```: mask of modal
+  - ```clickHandler```: the function called when mask is clicked  
+     
      ```ts
      type clickHandler = (controller: Controller, emiiter: Emitter, instance: VfModal) => void
      ``` 
+
     The ```emitter``` can also be obtained in modal through the injection
-  - autoCloseModal: if true modal will be closed when clicking mask, default is false
-  - classname: classname for mask, default is 'vf-modal-mask-wrapper'
-- transition: Vue's transition for modal
-  - name: Vue's transition name, default is 'vf-modal-fade'
-  - type: Vue's transition name, default is 'transition'
-- on: modal open/close hooks
-   ```ts
-  interface on {
-    modalOpen?: Function
-    modalClose?: Function
-  }
+  - ```autoCloseModal```: if true modal will be closed when clicking mask, default is false
+  - ```classname```: classname for mask, default is 'vf-modal-mask-wrapper'
+- ```transition```: Vue's transition for modal
+  - ```name```: Vue's transition name, default is 'vf-modal-fade'
+  - ```type```: Vue's transition name, default is 'transition'
+- ```on```: modal open/close hooks  
+   
+   ```ts 
+   interface on {
+     modalOpen?: Function
+     modalClose?: Function
+   }
    ``` 
-- multipleModal: control whether the same modal can open multiple
-- closeWhenRouteChanges: close modal when route changed.
-- container: the component that wrap the modal, it's classname is 'vf-modal-container-wrapper', default is 'div'
+
+- ```multipleModal```: control whether the same modal can open multiple
+- ```closeWhenRouteChanges```: close modal when route changed.
+- ```container```: the component that wrap the modal, it's classname is 'vf-modal-container-wrapper', default is 'div'
 
 ### OpenOptions
-- type:
+- ```type```:  
+   
    ```ts
    interface ModalObj {
     props?: Record<string, any>
@@ -190,11 +199,13 @@ $ yarn add vf-modal
     zIndex?: number
   }
    ```
+  
   Same type as above
 
 ### Injections
-You can provide your own injection using the ```provide``` property  in createConfig, but vf-modal also provides an injection, which contains the basic state of the modal instance.
-- type
+You can provide your own injection using the ```provide``` property  in createConfig, but vf-modal also provides an injection with the basic state of current context.
+- ```type```  
+  
    ```ts
    interface VfModalInstanceState {
      renderList: RenderList
@@ -202,6 +213,7 @@ You can provide your own injection using the ```provide``` property  in createCo
      emitter: Emitter
    }
    ```
-- renderList: list of currently rendered modal
-- close: same close method as provided by the ```Controller```
-- emitter: a emiiter create by [mitt](https://www.npmjs.com/package/mitt)
+
+- ```renderList```: list of currently rendered modal
+- ```close```: same close method as provided by the ```Controller```
+- ```emitter```: a emiiter create by [mitt](https://www.npmjs.com/package/mitt)
