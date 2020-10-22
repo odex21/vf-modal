@@ -10,8 +10,8 @@
 ### Install
 
 ```bash
-$ npm install vf-modal
-$ yarn add vf-modal
+$ npm install vf-modal@beta
+$ yarn add vf-modal@beta
 
 ```
 ### Start 
