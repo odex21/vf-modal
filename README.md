@@ -63,11 +63,6 @@ $ yarn add vf-modal@beta
                 default: 'hello',
                 required: true,
                 type: String
-              },
-              no: {
-                default: 1,
-                required: true,
-                type: Number
               }
             },
             setup (props) {
@@ -111,26 +106,60 @@ $ yarn add vf-modal@beta
 3. Open a modal anywhere
     ```js
     import { Controller } from './modal'
-
+    
     /**
      * open a modal with key
      * @param key {ModalKey}
-     * @param props {Record<string, any>} props of the modal component
-     * @param zIndex {number}
+     * @param opt {
+     *   props: {Record<string, any>} props of the modal component
+     *   zIndex: {number} default is 1
+     *   on: {EventMap} event listener
+     * }
+     * @return {
+     *   renderList: RenderList
+     *   isClosed: () => Promise<void>
+     *   close: () => void
+     * }
      */
     Controller.open('net')
-    Controller.open('hello')
+    const { close, isClosed } = Controller.open('hello', {
+      props: {
+        msg: 'haha'
+      },
+      on: {
+        // like <Component @xxx="function" />
+        xxx: (...args) => {
+          // do something
+        }
+      },
+      // maybe useful when stacking multiple modals
+      zIndex: 10
+    })
+
+    // ```only``` close the 'hello' modal
+    close()
+    // ```only``` await the 'hello' modal closed
+    isClosed()
+      .then(() => {
+        // do something
+      }) 
+
     
     /**
     * close a modal
-    * @param key modal key, if not provided, will close modal directly
+    * @param key  key of modal that you would close , if not provided, will close modal directly
     */
     Controller.close()
+    Controller.close('hello')
 
     /**
-    * returns a promise that will be resolved when the modal is closed
+    * returns a promise that will be resolved when the ```VFModal``` component is invisible
+    * that means it will be resolved on the ```onAfterEnter``` hook is triggered.
     */
     Controller.isClosed()
+      .then(() => {
+        // do something
+      })
     ```
 
 
@@ -189,18 +218,6 @@ $ yarn add vf-modal@beta
 - ```closeWhenRouteChanges```: close modal when route changed.
 - ```container```: the component that wrap the modal, it's classname is 'vf-modal-container-wrapper', default is 'div'
 
-### OpenOptions
-- ```type```:  
-   
-   ```ts
-   interface ModalObj {
-    props?: Record<string, any>
-    on?: EventMap
-    zIndex?: number
-  }
-   ```
-  
-  Same type as above
 
 ### Injections
 You can provide your own injection using the ```provide``` property  in createConfig, but vf-modal also provides an injection with the basic state of current context.
@@ -216,4 +233,4 @@ You can provide your own injection using the ```provide``` property  in createCo
 
 - ```renderList```: list of currently rendered modal
 - ```close```: same close method as provided by the ```Controller```
-- ```emitter```: a emiiter create by [mitt](https://www.npmjs.com/package/mitt)
+- ```emitter```: a emitter create by [mitt](https://www.npmjs.com/package/mitt)
