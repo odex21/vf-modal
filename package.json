@@ -12,7 +12,7 @@
   "scripts": {
     "build": "node scripts/build.js",
     "dev:esm": "node scripts/dev.js",
-    "test": "jest",
+    "test": "jest --runInBand",
     "babel": "babel src/test.tsx --config-file ./babel.config.js"
   },
   "files": [
@@ -22,11 +22,11 @@
   "dependencies": {
     "mitt": "^2.1.0",
     "ramda": "^0.27.0",
-    "vue": "^3.0.0",
+    "vue": "^3.0.4",
     "vue-router": "^4.0.0-beta.4"
   },
   "devDependencies": {
-    "@ant-design-vue/babel-plugin-jsx": "^1.0.0@rc2",
+    "@ant-design-vue/babel-plugin-jsx": "^1.0.0-rc.1",
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/preset-env": "^7.9.6",
@@ -37,10 +37,10 @@
     "@types/ramda": "^0.27.3",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
-    "@vue/babel-plugin-jsx": "^1.0.0-rc.2",
+    "@vue/babel-plugin-jsx": "^1.0.0-rc.4",
     "@vue/compiler-sfc": "^3.0.0-rc.10",
     "@vue/test-utils": "^2.0.0-beta.5",
-    "babel-core": "7.0.0-bridge.0",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^26.3.0",
     "babel-plugin-ramda": "^2.0.0",
     "csstype": "^3.0.0-beta.3",
@@ -61,7 +61,7 @@
     "ts-jest": "25.2.1",
     "typescript": "^4.0.2",
     "vue-eslint-parser": "^7.1.0",
-    "vue-jest": "^5.0.0-alpha.3"
+    "vue-jest": "^5.0.0-alpha.7"
   },
   "repository": {
     "type": "git",

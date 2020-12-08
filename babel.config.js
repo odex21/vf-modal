@@ -1,30 +1,32 @@
-module.exports = {
-  "presets": [
-    "@babel/preset-typescript"
-  ],
-  "plugins": [
-    [
-      "@vue/babel-plugin-jsx", {
-        transformOn: true
-      }
+module.exports = function (api){
+  api.cache(false)
+  return {
+    presets: [ "@babel/preset-typescript" ],
+    plugins: [
+      [
+        "@vue/babel-plugin-jsx",
+        {
+          transformOn: true,
+        },
+      ],
+      "@babel/plugin-proposal-optional-chaining",
     ],
-    "@babel/plugin-proposal-optional-chaining"
-  ],
-  "env": {
-    "test": {
-      "presets": [
-        "@babel/preset-typescript",
-        [
-          "@babel/preset-env",
-          {
-            "targets": {
-              "node": true,
+    env: {
+      test: {
+        presets: [
+          "@babel/preset-typescript",
+          [
+            "@babel/preset-env",
+            {
+              targets: {
+                node: true,
+              },
+              useBuiltIns: "usage",
+              corejs: 3,
             },
-            useBuiltIns: "usage",
-            corejs: 3
-          }
+          ],
         ],
-      ]
-    }
+      },
+    },
   }
-}
+  }

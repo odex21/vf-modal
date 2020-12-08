@@ -33,7 +33,6 @@
     "./**/*.ts",
     "./**/*.spec.ts",
     "./*.tsx",
-    "bbb.spec.js"
   ],
   "exclude": [
     "node_modules"
