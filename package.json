@@ -1,6 +1,6 @@
 {
   "name": "vf-modal",
-  "version": "0.1.0-rc.1",
+  "version": "0.1.0-rc.3",
   "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
@@ -13,11 +13,11 @@
     "build": "node scripts/build.js",
     "dev:esm": "node scripts/dev.js",
     "test": "jest --runInBand",
-    "babel": "babel src/test.tsx --config-file ./babel.config.js"
+    "babel": "babel src/test.tsx --config-file ./babel.config.js",
+    "prepublish": "yarn build"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "dependencies": {
     "mitt": "^2.1.0",
