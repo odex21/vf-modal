@@ -81,14 +81,14 @@ describe("close handler", () => {
         },
       },
       closeWhenRouteChanges: false,
-      fixWrapperClassname: 'test-close-handler'
+      fixWrapperClassname: "test-close-handler",
     })
     const Wrapper = mount(VfModal)
     const { isClosed, renderList } = Controller.open("test")
 
     await nextTick()
 
-    const buttonEl = Body.find('.test-close-handler').find("button")
+    const buttonEl = Body.find(".test-close-handler").find("button")
 
     isClosed().then(() => {
       expect(renderList.length).toBe(0)
@@ -132,7 +132,9 @@ describe("close handler", () => {
     const { renderList } = Controller.open("abCd")
     expect(renderList.find((el) => el.key === "abCd")!.isOpened).toBeTruthy()
 
-    Body.find(".abCd-test-mask-wrapper").find(".vf-modal-mask-wrapper").trigger("click")
+    Body.find(".abCd-test-mask-wrapper")
+      .find(".vf-modal-mask-wrapper")
+      .trigger("click")
     expect(renderList.length).toBe(0)
   })
 
@@ -221,7 +223,7 @@ describe("custom options", () => {
       modals: {
         test: {
           component: Base,
-          zIndex: 1000,
+          zIndex: 2000,
         },
       },
       closeWhenRouteChanges: false,
@@ -233,6 +235,7 @@ describe("custom options", () => {
     expect((c.element as any).style.zIndex).toBe("1000")
     Controller.open("test", { zIndex: 100 })
     await nextTick()
+    await sleep(500)
     expect((c.element as any).style.zIndex).toBe("100")
   })
 
@@ -282,7 +285,6 @@ describe("custom options", () => {
       closeWhenRouteChanges: true,
     })
 
-
     const router = createRouter({
       // omitted for brevity
       history: createWebHashHistory(),
@@ -290,21 +292,21 @@ describe("custom options", () => {
         {
           path: "/",
           component: {
-            template: 'Welcome to the blogging app'
-          }
+            template: "Welcome to the blogging app",
+          },
         },
         {
           path: "/foo",
           component: {
-            template: 'foo'
-          }
+            template: "foo",
+          },
         },
       ],
     })
 
     mount(VfModal, {
       global: {
-        plugins: [ router ],
+        plugins: [router],
       },
     })
 
