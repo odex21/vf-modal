@@ -15,8 +15,8 @@
 ### Install
 
 ```bash
-$ npm install vf-modal@beta
-$ yarn add vf-modal@beta
+$ npm install vf-modal@next
+$ yarn add vf-modal@next
 
 ```
 ### Start 
