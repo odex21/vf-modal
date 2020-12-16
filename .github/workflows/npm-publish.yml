@@ -42,6 +42,6 @@ jobs:
           path: dist
       - name: Display structure of prepublished files
         run: cd dist && ls -R
-      - run: npm publish --tag rc
+      - run: npm publish --tag next
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

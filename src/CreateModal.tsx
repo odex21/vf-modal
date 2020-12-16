@@ -1,19 +1,22 @@
 import {
   provide,
-  UnwrapRef,
   ref,
   Transition,
   defineComponent,
-  TransitionProps,
   reactive,
   watch,
   computed,
-  InjectionKey,
-  Component,
   shallowReactive,
   proxyRefs,
   Teleport,
 } from "vue"
+import type {
+  UnwrapRef,
+  TransitionProps,
+  Component,
+  InjectionKey,
+  ConcreteComponent
+} from 'vue'
 import { useRoute } from "vue-router"
 import { mergeDeepRight, mergeRight } from "ramda"
 import mitt, { Emitter, Handler } from "mitt"
@@ -22,13 +25,13 @@ export interface EventMap {
   [ x: string ]: Handler
 }
 
-export interface OpenOptions {
-  props?: Record<string, any>
+export interface OpenOptions<P> {
+  props?: P
   on?: EventMap
   zIndex?: number
 }
 interface ModalObj {
-  component: any
+  component: ConcreteComponent
   zIndex?: number
   isOpened?: boolean
   key?: string
@@ -42,12 +45,12 @@ interface ModalMap {
 type Listener = (...args: any[]) => any
 
 type CreateReturn = ReturnType<typeof createVfModal> //Pick<, K>
-type Controller = Pick<CreateReturn, "Controller"> extends {
+export type Controller = Pick<CreateReturn, "Controller"> extends {
   [ x: string ]: infer U
 }
   ? U
   : never
-type VfModal = Pick<CreateReturn, "VfModal"> extends { [ x: string ]: infer U }
+export type VfModal = Pick<CreateReturn, "VfModal"> extends { [ x: string ]: infer U }
   ? U
   : never
 
@@ -56,7 +59,11 @@ interface CreateConfig<T extends ModalMap> {
   provide?: () => void
   mask?: {
     clickHandler?: (
-      controller: Controller,
+      controller: {
+        open: (key: string, config: Record<string, any>) => void,
+        close: (key?: string) => void
+        isClosed: () => Promise<void>
+      },
       emiiter: Emitter,
       instance: VfModal
     ) => void
@@ -103,7 +110,6 @@ interface RenderItemOpt extends RenderItemOptTemp {
 }
 
 type RenderList = UnwrapRef<RenderItemOpt[]>
-// type RenderItem = RenderList extends (infer T)[] ? T : never
 
 export const VfMODAL_STORE_KEY: InjectionKey<VfModalInstanceState> = Symbol(
   "VF_MODAL_STORE_KEY"
@@ -156,7 +162,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
   /**
    * open a modal with key
    */
-  const open = (key: ModalKey, opt?: OpenOptions) => {
+  const open = <K extends ModalKey> (key: K, opt?: OpenOptions<ComponentProps<T[ K ][ 'component' ]>>) => {
     if (!modals[ key ]) {
       throw new Error(`can not find the modal by key: ${key}`)
     }
@@ -366,3 +372,6 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
     emitter,
   }
 }
+
+
+export type ComponentProps<C> = C extends ConcreteComponent<infer P> ? P : never

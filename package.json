@@ -1,6 +1,6 @@
 {
   "name": "vf-modal",
-  "version": "0.1.0-rc.3",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
@@ -21,7 +21,7 @@
   "dependencies": {
     "mitt": "^2.1.0",
     "ramda": "^0.27.0",
-    "vue": "^3.0.4",
+    "vue": "^3.0.3",
     "vue-router": "^4.0.0-beta.4"
   },
   "devDependencies": {
@@ -37,7 +37,7 @@
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
     "@vue/babel-plugin-jsx": "^1.0.0-rc.4",
-    "@vue/compiler-sfc": "^3.0.0-rc.10",
+    "@vue/compiler-sfc": "^3.0.3",
     "@vue/test-utils": "^2.0.0-beta.5",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^26.3.0",
