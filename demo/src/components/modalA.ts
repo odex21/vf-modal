@@ -1,33 +1,28 @@
-import { createVfModal, } from '/vf-modal/index'
-import { ApiError } from './modals/ApiError'
-import NetError from './modals/NetError.vue'
-import '/vf-modal/index.css'
+import { createVfModal } from "/vf-modal/index"
+import { ApiError } from "./modals/ApiError"
+import NetError from "./modals/NetError.vue"
+import "/vf-modal/index.css"
 
-import { provideStore } from './modalShare'
+import { provideStore } from "./modalShare"
 
 const { VfModal, Controller } = createVfModal({
   modals: {
     test: {
-      component: NetError
+      component: NetError,
     },
     api: {
-      component: ApiError
-    }
+      component: ApiError,
+    },
   },
   provide: provideStore,
   on: {
     modalClose: () => {
-      console.log('close 1')
+      console.log("close 1")
     },
     modalOpen: () => {
-      console.log('open 2')
-
-    }
-  }
+      console.log("open 2")
+    },
+  },
 })
 
-export {
-  VfModal as ModalTest,
-  Controller,
-}
-
+export { VfModal as ModalTest, Controller }

@@ -20,6 +20,7 @@ import type {
 import { useRoute } from "vue-router"
 import { mergeDeepRight, mergeRight } from "ramda"
 import mitt, { Emitter, Handler } from "mitt"
+import { callHook } from './utils'
 
 export interface EventMap {
   [ x: string ]: Handler
@@ -141,7 +142,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
    */
   const handlerOnAfterEnter = () => {
     visible.value = true
-    if (on!.modalOpen) on!.modalOpen()
+    callHook(on?.modalOpen)
   }
 
   /**
@@ -149,7 +150,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
    */
   const handlerOnAfterLeave = () => {
     visible.value = false
-    if (on!.modalClose) on!.modalClose()
+    callHook(on?.modalClose)
   }
 
   /**

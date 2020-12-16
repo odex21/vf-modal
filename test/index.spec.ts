@@ -4,7 +4,13 @@ import { DOMWrapper, mount, shallowMount } from "@vue/test-utils"
 import { Counter } from "./components/counter"
 import { createVfModal } from "../src/index"
 import Base from "./components/Base.vue"
-import { nextTick, onErrorCaptured, defineComponent, createVNode } from "vue"
+import {
+  nextTick,
+  onErrorCaptured,
+  defineComponent,
+  createVNode,
+  FunctionalComponent,
+} from "vue"
 import { sleep } from "./utils"
 import { createRouter, createWebHashHistory, RouterView } from "vue-router"
 
@@ -189,8 +195,6 @@ describe("close handler", () => {
 })
 
 describe("muti modal", () => {
-  const Body = new DOMWrapper(document.body)
-
   const { VfModal, Controller } = createVfModal({
     modals: {
       test: {
@@ -223,7 +227,7 @@ describe("custom options", () => {
       modals: {
         test: {
           component: Base,
-          zIndex: 2000,
+          zIndex: 1000,
         },
       },
       closeWhenRouteChanges: false,
@@ -233,10 +237,24 @@ describe("custom options", () => {
     await nextTick()
     const c = Wrapper.getComponent(Base)
     expect((c.element as any).style.zIndex).toBe("1000")
-    Controller.open("test", { zIndex: 100 })
+  })
+
+  it("set zIndex when opening", async () => {
+    const { VfModal, Controller } = createVfModal({
+      modals: {
+        test: {
+          component: Base,
+        },
+      },
+      closeWhenRouteChanges: false,
+    })
+    const Wrapper = mount(VfModal)
+    Controller.open("test", {
+      zIndex: 996,
+    })
     await nextTick()
-    await sleep(500)
-    expect((c.element as any).style.zIndex).toBe("100")
+    const c = Wrapper.getComponent(Base)
+    expect((c.element as any).style.zIndex).toBe("996")
   })
 
   it("modal open/close hook should work well", async () => {
@@ -248,19 +266,27 @@ describe("custom options", () => {
           zIndex: 1000,
         },
       },
-      closeWhenRouteChanges: false,
+      closeWhenRouteChanges: true,
       on: {
-        modalOpen: () => index++,
+        modalOpen: () => {
+          index++
+        },
         modalClose: () => index++,
       },
     })
 
-    mount(VfModal)
+    mount(VfModal, {
+      global: {
+        stubs: {
+          transition: false,
+        },
+      },
+    })
 
     Controller.open("test")
 
     await nextTick()
-    await sleep(500)
+    await sleep(1500)
     expect(index).toBe(1)
 
     Controller.close()

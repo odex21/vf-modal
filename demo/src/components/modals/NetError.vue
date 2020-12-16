@@ -45,7 +45,7 @@ export default defineComponent({
     onMounted(() => {
       console.log('hhhhhh')
 
-      emit('hhh')
+      // emit('hhh')
       // props.emitter.emit('hhh')
     })
 

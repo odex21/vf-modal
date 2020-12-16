@@ -41,12 +41,27 @@ export default defineComponent({
           hhh: () => {
             console.log('on hhh')
             addMsg()
+            openModalTestIndex()
           }
-        }
+        },
+        zIndex: 10
       })
       // await isClosed()
       await Controller.isClosed()
       console.log('close  sss')
+    }
+
+    const openModalTestIndex = async () => {
+      const { isClosed } = Controller.open('test', {
+        props: { msg },
+        on: {
+          hhh: () => {
+            console.log('on hhh')
+            addMsg()
+          }
+        },
+        zIndex: 100
+      })
     }
 
     const addMsg = () => {
