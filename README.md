@@ -1,8 +1,8 @@
 # vf-modal  
 ![CircleCI](https://img.shields.io/circleci/build/gh/odex21/vf-modal/next?style=for-the-badge)
-![npm (tag)](https://img.shields.io/npm/v/vf-modal/rc?color=blue&style=for-the-badge) 
+![npm (tag)](https://img.shields.io/npm/v/vf-modal/next?color=blue&style=for-the-badge) 
 ![Codecov](https://img.shields.io/codecov/c/github/odex21/vf-modal?style=for-the-badge&token=XI749WLGTF)
-![npm bundle size (version)](https://img.shields.io/bundlephobia/minzip/vf-modal/0.1.0-rc.3)
+![npm bundle size (version)](https://img.shields.io/bundlephobia/minzip/vf-modal/0.2.0-next?style=for-the-badge)
 
 ## A simple modal framework for vue3.
 > only 3KB gzip size
