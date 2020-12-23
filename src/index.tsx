@@ -5,10 +5,9 @@ import { prevent, generateClass, findKey, hyphenate } from './utils'
 import { filter, merge } from 'ramda'
 import { VueConstructor } from 'vue/types/vue'
 import { ComponentOptions } from 'vue/types/options'
-import compositionApi, { onUnmounted } from '@vue/composition-api'
+import { onUnmounted } from '@vue/composition-api'
 import * as CSS from 'csstype'
 
-Vue.use(compositionApi)
 
 export type Listener<T> = (instance: T, type: CloseType, ...args: any[]) => any
 export interface ListenerGroup<T> {
