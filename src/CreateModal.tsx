@@ -15,7 +15,7 @@ import type {
   TransitionProps,
   Component,
   InjectionKey,
-  ConcreteComponent
+  // ConcreteComponent
 } from 'vue'
 import { useRoute } from "vue-router"
 import { mergeDeepRight, mergeRight } from "ramda"
@@ -32,7 +32,7 @@ export interface OpenOptions<P> {
   zIndex?: number
 }
 interface ModalObj {
-  component: ConcreteComponent
+  component: any
   zIndex?: number
   isOpened?: boolean
   key?: string
@@ -163,7 +163,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
   /**
    * open a modal with key
    */
-  const open = <K extends ModalKey> (key: K, opt?: OpenOptions<ComponentProps<T[ K ][ 'component' ]>>) => {
+  const open = <K extends ModalKey> (key: K, opt?: OpenOptions<any>) => {
     if (!modals[ key ]) {
       throw new Error(`can not find the modal by key: ${key}`)
     }
@@ -375,4 +375,4 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
 }
 
 
-export type ComponentProps<C> = C extends ConcreteComponent<infer P> ? P : never
+// export type ComponentProps<C> = C extends ConcreteComponent<infer P> ? P : never
