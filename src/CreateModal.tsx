@@ -95,7 +95,7 @@ const defaultCreateConfig: Omit<CreateConfig<never>, "modals"> = {
     classname: "vf-modal-mask-wrapper",
   },
   on: {},
-  closeWhenRouteChanges: false,
+  closeWhenRouteChanges: true,
   container: "div",
 }
 
