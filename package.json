@@ -1,6 +1,6 @@
 {
   "name": "vf-modal",
-  "version": "0.2.2-next",
+  "version": "0.2.3-next",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "license": "MIT",
