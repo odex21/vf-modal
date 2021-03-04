@@ -14,21 +14,18 @@ import commonjs from 'rollup-plugin-commonjs'
 //   throw new Error('TARGET package must be specified via --environment flag.')
 // }
 
-
 const output = [
   {
-    file: `dist/index.js`,
+    file: `dist/index.esm.js`,
     format: 'esm',
+  },
+  {
+    file: `dist/index.cjs.js`,
+    format: 'cjs',
   },
 ]
 
-const external = [
-  'vue',
-  'vue-router',
-  'ramda',
-  'mitt'
-]
-
+const external = ['vue', 'vue-router', 'ramda', 'mitt']
 
 console.log(process.env.NODE_ENV)
 
@@ -57,11 +54,13 @@ const plugins = [
       use: [
         (stylus) => {
           stylus.set('prefix', 'vf-modal-')
-        }
-      ]
-    }
+        },
+      ],
+    },
   }),
-  css(),
+  css({
+    dest: 'dist/index.css',
+  }),
 ]
 
 // if (MODE === 'production') {
@@ -72,5 +71,5 @@ export default {
   input: 'src/index.tsx',
   output,
   plugins,
-  external
+  external,
 }
