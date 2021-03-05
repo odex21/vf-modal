@@ -10,7 +10,7 @@ defaults: &defaults
 step_install_deps: &install_deps
   run:
     name: Install Dependencies
-    command: yarn --frozen-lockfile
+    command: yarn
 
 jobs:
   test:
