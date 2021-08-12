@@ -101,7 +101,10 @@ const defaultCreateConfig: Omit<CreateConfig<never>, "modals"> = {
 
 interface VfModalInstanceState {
   renderList: RenderList
-  close: (key?: string) => void
+  close: (
+    key?: string,
+    opt?: { closeModal?: boolean; mutiKey?: string }
+  ) => void
   emitter: Emitter
 }
 
