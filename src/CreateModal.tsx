@@ -9,7 +9,7 @@ import {
   shallowReactive,
   proxyRefs,
   Teleport,
-} from "vue"
+} from 'vue'
 import type {
   UnwrapRef,
   TransitionProps,
@@ -17,13 +17,13 @@ import type {
   InjectionKey,
   // ConcreteComponent
 } from 'vue'
-import { useRoute } from "vue-router"
-import { mergeDeepRight, mergeRight } from "ramda"
-import mitt, { Emitter, Handler } from "mitt"
+import { useRoute } from 'vue-router'
+import { mergeDeepRight, mergeRight } from 'ramda'
+import mitt, { Emitter, Handler } from 'mitt'
 import { callHook } from './utils'
 
 export interface EventMap {
-  [ x: string ]: Handler
+  [x: string]: Handler
 }
 
 export interface OpenOptions<P> {
@@ -40,18 +40,20 @@ interface ModalObj {
   on?: EventMap
 }
 interface ModalMap {
-  [ index: string ]: Pick<ModalObj, "component" | "zIndex" | "on" | "props">
+  [index: string]: Pick<ModalObj, 'component' | 'zIndex' | 'on' | 'props'>
 }
 
 type Listener = (...args: any[]) => any
 
 type CreateReturn = ReturnType<typeof createVfModal> //Pick<, K>
-export type Controller = Pick<CreateReturn, "Controller"> extends {
-  [ x: string ]: infer U
+export type Controller = Pick<CreateReturn, 'Controller'> extends {
+  [x: string]: infer U
 }
   ? U
   : never
-export type VfModal = Pick<CreateReturn, "VfModal"> extends { [ x: string ]: infer U }
+export type VfModal = Pick<CreateReturn, 'VfModal'> extends {
+  [x: string]: infer U
+}
   ? U
   : never
 
@@ -61,7 +63,7 @@ interface CreateConfig<T extends ModalMap> {
   mask?: {
     clickHandler?: (
       controller: {
-        open: (key: string, config: Record<string, any>) => void,
+        open: (key: string, config: Record<string, any>) => void
         close: (key?: string) => void
         isClosed: () => Promise<void>
       },
@@ -73,7 +75,7 @@ interface CreateConfig<T extends ModalMap> {
   }
   transition?: {
     name: string
-    type: TransitionProps[ "type" ]
+    type: TransitionProps['type']
   }
   on?: {
     modalOpen?: Listener
@@ -85,18 +87,18 @@ interface CreateConfig<T extends ModalMap> {
   container?: string | Component
 }
 
-const defaultCreateConfig: Omit<CreateConfig<never>, "modals"> = {
+const defaultCreateConfig: Omit<CreateConfig<never>, 'modals'> = {
   transition: {
-    name: "vf-modal-fade",
-    type: "transition",
+    name: 'vf-modal-fade',
+    type: 'transition',
   },
   mask: {
     autoCloseModal: false,
-    classname: "vf-modal-mask-wrapper",
+    classname: 'vf-modal-mask-wrapper',
   },
   on: {},
   closeWhenRouteChanges: true,
-  container: "div",
+  container: 'div',
 }
 
 interface VfModalInstanceState {
@@ -108,18 +110,17 @@ interface VfModalInstanceState {
   emitter: Emitter
 }
 
-type RenderItemOptTemp = Required<Omit<ModalObj, "component">>
+type RenderItemOptTemp = Required<Omit<ModalObj, 'component'>>
 interface RenderItemOpt extends RenderItemOptTemp {
-  mutiKey?: string
+  multiKey?: string
 }
 
 type RenderList = UnwrapRef<RenderItemOpt[]>
 
-export const VfMODAL_STORE_KEY: InjectionKey<VfModalInstanceState> = Symbol(
-  "VF_MODAL_STORE_KEY"
-)
+export const VfMODAL_STORE_KEY: InjectionKey<VfModalInstanceState> =
+  Symbol('VF_MODAL_STORE_KEY')
 
-export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
+export const createVfModal = <T extends ModalMap>(config: CreateConfig<T>) => {
   type ModalKey = keyof T & string
 
   const { modals } = config
@@ -166,16 +167,16 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
   /**
    * open a modal with key
    */
-  const open = <K extends ModalKey> (key: K, opt?: OpenOptions<any>) => {
-    if (!modals[ key ]) {
+  const open = <K extends ModalKey>(key: K, opt?: OpenOptions<any>) => {
+    if (!modals[key]) {
       throw new Error(`can not find the modal by key: ${key}`)
     }
 
     const { zIndex, props, on } = mergeRight(
       {
-        zIndex: modals[ key ].zIndex || 1,
-        props: modals[ key ].props || {},
-        on: modals[ key ].on || {},
+        zIndex: modals[key].zIndex || 1,
+        props: modals[key].props || {},
+        on: modals[key].on || {},
       },
       opt || {}
     )
@@ -183,11 +184,15 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
     isModalOpened.value = true
 
     const item = shallowReactive({ isOpened: true, zIndex, key, props, on })
-    let mutiKey: string
+    let multiKey: string
 
     if (multipleModal) {
-      mutiKey = key + renderList.length
-      renderList.push({ ...item, mutiKey })
+      multiKey = key + renderList.length
+      renderList.push({
+        ...item,
+        multiKey,
+        props: { ...props, multiKey },
+      })
     } else {
       const target = renderList.find((el) => el.key === key)
       if (target) {
@@ -210,8 +215,8 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             return
           }
           const unWatch = watch(
-            [ () => item.isOpened, () => renderList.length ] as const,
-            ([ value, len ]) => {
+            [() => item.isOpened, () => renderList.length] as const,
+            ([value, len]) => {
               if (!value || len === 0) {
                 resolve()
                 unWatch()
@@ -221,7 +226,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
           )
         }),
       close: () => {
-        close(key, { mutiKey, closeModal: false })
+        close(key, { multiKey, closeModal: false })
       },
     }
   }
@@ -232,14 +237,14 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
    */
   const close = (
     key?: ModalKey,
-    opt?: { closeModal?: boolean; mutiKey?: string }
+    opt?: { closeModal?: boolean; multiKey?: string }
   ) => {
-    const { closeModal, mutiKey } = opt || { closeModal: true }
+    const { closeModal, multiKey } = opt || { closeModal: true }
     if (key) {
-      const k = mutiKey || key
-      const _k = mutiKey ? "mutiKey" : "key"
+      const k = multiKey || key
+      const _k = multiKey ? 'multiKey' : 'key'
       renderList
-        .filter((el) => el[ _k ] === k && el.isOpened)
+        .filter((el) => el[_k] === k && el.isOpened)
         .forEach((e) => (e.isOpened = false))
     }
     if (
@@ -273,8 +278,8 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
     })
 
   const VfModal = defineComponent({
-    name: "vf-modal-instance",
-    setup () {
+    name: 'vf-modal-instance',
+    setup() {
       // close modal when route change
       if (closeWhenRouteChanges) {
         const routerLink = useRoute()
@@ -304,9 +309,9 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
         return renderList
           .filter((el) => el.isOpened)
           .map((el) => {
-            const { key, props, mutiKey, on } = el
+            const { key, props, multiKey: mutiKey, on } = el
 
-            const component = modals[ key ].component
+            const component = modals[key].component
 
             const handlerClose = (closeModal = true) => {
               close(key, { closeModal })
@@ -343,7 +348,7 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
             onAfterLeave={handlerOnAfterLeave}
           >
             <div
-              class={fixWrapperClassname || "vf-modal-fixed-wrapper"}
+              class={fixWrapperClassname || 'vf-modal-fixed-wrapper'}
               v-show={isModalOpened.value}
             >
               <container
@@ -376,6 +381,5 @@ export const createVfModal = <T extends ModalMap> (config: CreateConfig<T>) => {
     emitter,
   }
 }
-
 
 // export type ComponentProps<C> = C extends ConcreteComponent<infer P> ? P : never

@@ -1,22 +1,22 @@
 // Import the mount() method from the test utils
 // and the component you want to test
-import { DOMWrapper, mount, shallowMount } from "@vue/test-utils"
-import { Counter } from "./components/counter"
-import { createVfModal } from "../src/index"
-import Base from "./components/Base.vue"
+import { DOMWrapper, mount, shallowMount } from '@vue/test-utils'
+import { Counter } from './components/counter'
+import { createVfModal } from '../src/index'
+import Base from './components/Base.vue'
 import {
   nextTick,
   onErrorCaptured,
   defineComponent,
   createVNode,
   FunctionalComponent,
-} from "vue"
-import { sleep } from "./utils"
-import { createRouter, createWebHashHistory, RouterView } from "vue-router"
+} from 'vue'
+import { sleep } from './utils'
+import { createRouter, createWebHashHistory, RouterView } from 'vue-router'
 
 jest.setTimeout(30 * 1000)
 
-describe("load a simple vue component", () => {
+describe('load a simple vue component', () => {
   const { Controller, VfModal } = createVfModal({
     modals: {
       test: {
@@ -34,52 +34,54 @@ describe("load a simple vue component", () => {
     ? P
     : never
 
-  it("renders the correct markup", async () => {
-    const t = Controller.open("test")
+  it('renders the correct markup', async () => {
+    const t = Controller.open('test')
     renderList = t.renderList
     await nextTick()
     expect(Body.html()).toContain('<span class="count">0</span>')
-    expect(Body.get("button")).not.toBe(null)
+    expect(Body.get('button')).not.toBe(null)
   })
 
-  it("button should increment the count", async () => {
-    Controller.open("test")
+  it('button should increment the count', async () => {
+    Controller.open('test')
     const instance = Wrapper.getComponent(Counter)
 
     const vm = instance.vm
     expect(vm.count).toBe(0)
 
-    const button = Body.find("button")
-    button.trigger("click")
+    const button = Body.find('button')
+    button.trigger('click')
     expect(vm.count).toBe(1)
   })
 
-  it("error type should throw error", async () => {
+  it('error type should throw error', async () => {
     try {
-      Controller.open("a")
+      //@ts-expect-error
+      Controller.open('a')
     } catch (error) {
-      expect(error.message).toBe("can not find the modal by key: a")
+      //@ts-expect-error
+      expect(error.message).toBe('can not find the modal by key: a')
     }
   })
 
-  it("miss type should throw error", async () => {
+  it('miss type should throw error', async () => {
     try {
       Controller.open()
     } catch (error) {
-      expect(error.message).toBe("can not find the modal by key: undefined")
+      expect(error.message).toBe('can not find the modal by key: undefined')
     }
   })
 
-  it("click mask wrapper should do nonting", () => {
-    Body.find(".vf-modal-mask-wrapper").trigger("click")
+  it('click mask wrapper should do nonting', () => {
+    Body.find('.vf-modal-mask-wrapper').trigger('click')
     expect(renderList.length).toBe(1)
   })
 })
 
-describe("close handler", () => {
+describe('close handler', () => {
   const Body = new DOMWrapper(document.body)
 
-  it("modal emit close event should close modal", async () => {
+  it('modal emit close event should close modal', async () => {
     const { VfModal, Controller } = createVfModal({
       modals: {
         test: {
@@ -87,22 +89,22 @@ describe("close handler", () => {
         },
       },
       closeWhenRouteChanges: false,
-      fixWrapperClassname: "test-close-handler",
+      fixWrapperClassname: 'test-close-handler',
     })
     const Wrapper = mount(VfModal)
-    const { isClosed, renderList } = Controller.open("test")
+    const { isClosed, renderList } = Controller.open('test')
 
     await nextTick()
 
-    const buttonEl = Body.find(".test-close-handler").find("button")
+    const buttonEl = Body.find('.test-close-handler').find('button')
 
     isClosed().then(() => {
       expect(renderList.length).toBe(0)
     })
-    buttonEl.trigger("click")
+    buttonEl.trigger('click')
   })
 
-  it("when modal is closed isClose should work well", async () => {
+  it('when modal is closed isClose should work well', async () => {
     const { VfModal, Controller } = createVfModal({
       modals: {
         test: {
@@ -111,66 +113,66 @@ describe("close handler", () => {
       },
       closeWhenRouteChanges: false,
     })
-    const { isClosed, renderList, close } = Controller.open("test")
+    const { isClosed, renderList, close } = Controller.open('test')
 
     close()
     const state = await isClosed()
     expect(state).toBeUndefined()
 
-    const item = renderList.find((el) => el.key === "test")
+    const item = renderList.find((el) => el.key === 'test')
     expect(item).toBeFalsy()
   })
 
-  it("mask wrapper should work", async () => {
+  it('mask wrapper should work', async () => {
     const { Controller, VfModal } = createVfModal({
       modals: {
         abCd: {
           component: Base,
-          ref: "base",
+          ref: 'base',
         },
       },
       mask: { autoCloseModal: true },
       closeWhenRouteChanges: false,
-      fixWrapperClassname: "abCd-test-mask-wrapper",
+      fixWrapperClassname: 'abCd-test-mask-wrapper',
     })
 
     mount(VfModal)
-    const { renderList } = Controller.open("abCd")
-    expect(renderList.find((el) => el.key === "abCd")!.isOpened).toBeTruthy()
+    const { renderList } = Controller.open('abCd')
+    expect(renderList.find((el) => el.key === 'abCd')!.isOpened).toBeTruthy()
 
-    Body.find(".abCd-test-mask-wrapper")
-      .find(".vf-modal-mask-wrapper")
-      .trigger("click")
+    Body.find('.abCd-test-mask-wrapper')
+      .find('.vf-modal-mask-wrapper')
+      .trigger('click')
     expect(renderList.length).toBe(0)
   })
 
-  it("option of mask wrapper  should work", async () => {
+  it('option of mask wrapper  should work', async () => {
     const { Controller, VfModal } = createVfModal({
       modals: {
         abCd: {
           component: Base,
-          ref: "base",
+          ref: 'base',
         },
       },
       mask: {
         clickHandler: (controller, emitter, instance) => {
           controller.close()
         },
-        classname: "test-class",
+        classname: 'test-class',
       },
       closeWhenRouteChanges: false,
     })
 
     const Wrapper = mount(VfModal)
-    const { renderList } = Controller.open("abCd")
-    expect(renderList.find((el) => el.key === "abCd")!.isOpened).toBeTruthy()
+    const { renderList } = Controller.open('abCd')
+    expect(renderList.find((el) => el.key === 'abCd')!.isOpened).toBeTruthy()
 
-    Body.find(".test-class").trigger("click")
+    Body.find('.test-class').trigger('click')
 
     expect(renderList.length).toBe(0)
   })
 
-  it("close modal by Controller", async () => {
+  it('close modal by Controller', async () => {
     const { VfModal, Controller } = createVfModal({
       modals: {
         abCd: {
@@ -184,8 +186,8 @@ describe("close handler", () => {
 
     mount(VfModal)
 
-    const { renderList, isClosed } = Controller.open("abCd")
-    Controller.open("abCde")
+    const { renderList, isClosed } = Controller.open('abCd')
+    Controller.open('abCde')
 
     expect(renderList.length).toBe(2)
     Controller.close()
@@ -194,7 +196,7 @@ describe("close handler", () => {
   })
 })
 
-describe("muti modal", () => {
+describe('muti modal', () => {
   const { VfModal, Controller } = createVfModal({
     modals: {
       test: {
@@ -208,9 +210,9 @@ describe("muti modal", () => {
 
   const Wrapper = mount(VfModal)
 
-  it("open muti modal", async () => {
-    Controller.open("test")
-    const { close } = Controller.open("test")
+  it('open muti modal', async () => {
+    Controller.open('test')
+    const { close } = Controller.open('test')
     await nextTick()
     const list = Wrapper.findAllComponents(Base)
     expect(list.length).toBe(2)
@@ -221,8 +223,8 @@ describe("muti modal", () => {
   })
 })
 
-describe("custom options", () => {
-  it("zIndex", async () => {
+describe('custom options', () => {
+  it('zIndex', async () => {
     const { VfModal, Controller } = createVfModal({
       modals: {
         test: {
@@ -233,13 +235,13 @@ describe("custom options", () => {
       closeWhenRouteChanges: false,
     })
     const Wrapper = mount(VfModal)
-    Controller.open("test")
+    Controller.open('test')
     await nextTick()
     const c = Wrapper.getComponent(Base)
-    expect((c.element as any).style.zIndex).toBe("1000")
+    expect((c.element as any).style.zIndex).toBe('1000')
   })
 
-  it("set zIndex when opening", async () => {
+  it('set zIndex when opening', async () => {
     const { VfModal, Controller } = createVfModal({
       modals: {
         test: {
@@ -249,15 +251,15 @@ describe("custom options", () => {
       closeWhenRouteChanges: false,
     })
     const Wrapper = mount(VfModal)
-    Controller.open("test", {
+    Controller.open('test', {
       zIndex: 996,
     })
     await nextTick()
     const c = Wrapper.getComponent(Base)
-    expect((c.element as any).style.zIndex).toBe("996")
+    expect((c.element as any).style.zIndex).toBe('996')
   })
 
-  it("modal open/close hook should work well", async () => {
+  it('modal open/close hook should work well', async () => {
     let index = 0
     const { VfModal, Controller } = createVfModal({
       modals: {
@@ -283,7 +285,7 @@ describe("custom options", () => {
       },
     })
 
-    Controller.open("test")
+    Controller.open('test')
 
     await nextTick()
     await sleep(1500)
@@ -300,7 +302,7 @@ describe("custom options", () => {
     expect(await Controller.isClosed()).toBe(void 0)
   })
 
-  it("close when router changed", async () => {
+  it('close when router changed', async () => {
     const { VfModal, Controller } = createVfModal({
       modals: {
         test: {
@@ -316,15 +318,15 @@ describe("custom options", () => {
       history: createWebHashHistory(),
       routes: [
         {
-          path: "/",
+          path: '/',
           component: {
-            template: "Welcome to the blogging app",
+            template: 'Welcome to the blogging app',
           },
         },
         {
-          path: "/foo",
+          path: '/foo',
           component: {
-            template: "foo",
+            template: 'foo',
           },
         },
       ],
@@ -336,14 +338,14 @@ describe("custom options", () => {
       },
     })
 
-    const { renderList } = Controller.open("test")
+    const { renderList } = Controller.open('test')
 
     await router.isReady()
     await nextTick()
     expect(renderList.length).toBe(1)
-    await router.push("/foo")
+    await router.push('/foo')
     await nextTick()
-    expect(router.currentRoute.value.path).toBe("/foo")
+    expect(router.currentRoute.value.path).toBe('/foo')
     await nextTick()
     expect(renderList.length).toBe(0)
   })
