@@ -105,7 +105,7 @@ interface VfModalInstanceState {
   renderList: RenderList
   close: (
     key?: string,
-    opt?: { closeModal?: boolean; mutiKey?: string }
+    opt?: { closeModal?: boolean; multiKey?: string }
   ) => void
   emitter: Emitter
 }
@@ -309,7 +309,7 @@ export const createVfModal = <T extends ModalMap>(config: CreateConfig<T>) => {
         return renderList
           .filter((el) => el.isOpened)
           .map((el) => {
-            const { key, props, multiKey: mutiKey, on } = el
+            const { key, props, multiKey, on } = el
 
             const component = modals[key].component
 
@@ -323,7 +323,7 @@ export const createVfModal = <T extends ModalMap>(config: CreateConfig<T>) => {
                 onClose={handlerClose}
                 on={on}
                 name={key}
-                key={mutiKey}
+                key={multiKey}
                 style={{ zIndex: el.zIndex }}
               ></component>
             )
