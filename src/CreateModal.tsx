@@ -15,7 +15,7 @@ import type {
   TransitionProps,
   Component,
   InjectionKey,
-  // ConcreteComponent
+  Ref,
 } from 'vue'
 import { useRoute } from 'vue-router'
 import { mergeDeepRight, mergeRight } from 'ramda'
@@ -26,8 +26,16 @@ export interface EventMap {
   [x: string]: Handler
 }
 
-export interface OpenOptions<P> {
-  props?: P
+export type MaybeRefOpions<T> = {
+  [P in keyof T]?: T[P] | Ref<T[P]>
+}
+
+export interface OpenOptions<C> {
+  props?: C extends Component<infer P>
+    ? P extends { $props: infer Props }
+      ? MaybeRefOpions<Omit<Props, 'modelValue'>>
+      : object
+    : object
   on?: EventMap
   zIndex?: number
 }
@@ -167,7 +175,10 @@ export const createVfModal = <T extends ModalMap>(config: CreateConfig<T>) => {
   /**
    * open a modal with key
    */
-  const open = <K extends ModalKey>(key: K, opt?: OpenOptions<any>) => {
+  const open = <K extends ModalKey>(
+    key: K,
+    opt?: OpenOptions<T[K]['component']>
+  ) => {
     if (!modals[key]) {
       throw new Error(`can not find the modal by key: ${key}`)
     }
@@ -381,5 +392,3 @@ export const createVfModal = <T extends ModalMap>(config: CreateConfig<T>) => {
     emitter,
   }
 }
-
-// export type ComponentProps<C> = C extends ConcreteComponent<infer P> ? P : never
