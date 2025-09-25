@@ -1,25 +1,29 @@
 @import './fn'
 
 .fixed-wrapper {
-  z-index: 10
-  position: fixed
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
-  display: flex
-  justify-content: center
-  align-items: center
-  user-select: none
+  z-index 10
+  position fixed
+  top 0
+  left 0
+  right 0
+  bottom 0
+  display flex
+  justify-content center
+  align-items center
+  user-select none
+}
+
+.vf-modal-container-wrapper {
+  user-select auto
 }
 
 .mask-wrapper {
-  position: fixed
-  top: 0
-  left: 0
-  bottom: 0
-  right: 0
-  background: rgba(0, 0, 0, 0.6)
+  position fixed
+  top 0
+  left 0
+  bottom 0
+  right 0
+  background rgba(0, 0, 0, 0.6)
 }
 
 enterTime = 0.3s
@@ -27,37 +31,37 @@ leaveTime = 0.3s
 transitionTime = enterTime
 
 .fade {
-  transition: opacity transitionTime ease
+  transition opacity transitionTime ease
 }
 
 .fade-appear, .fade-enter, .fade-leave-active {
-  opacity: 0
+  opacity 0
 }
 
 .fade-anim-leave-active, .fade-anim-enter-active {
-  animation: fade-enter leaveTime
+  animation fade-enter leaveTime
 }
 
 .fade-anim-long-enter-active, .fade-anim-long-leave-active {
-  animation: fade-enter enterTime
+  animation fade-enter enterTime
 }
 
 @keyframes fade-enter {
   from {
-    opacity: 0
+    opacity 0
   }
 
   to {
-    opacity: 1
+    opacity 1
   }
 }
 
 @keyframes fade-leave {
   from {
-    opacity: 1
+    opacity 1
   }
 
   to {
-    opacity: 0
+    opacity 0
   }
 }
